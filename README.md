@@ -38,10 +38,22 @@ This is the fastest way to get up and running!
    - Select "Create codespace on main".
    - Once your Codespace is fully loaded, you are ready to go!
 
+Make sure to wait for algokit to be installed automatically - it should only take a few mins max!
+
+2. **While in Codespace:**
+   - Enter the workspace 
+   <img width="2794" height="1524" alt="image" src="https://github.com/user-attachments/assets/41f25490-1284-4998-b342-27f7a0ffb420" />
+
+3. **Give it a testrun!:** (WIP)
+   - Click on run & debug
+   - Run and deploy the hello world smart contract
+   - And then run dApp - check out what is already given to you!
+   <img width="1528" height="808" alt="image" src="https://github.com/user-attachments/assets/2f337d67-02e2-4b0c-8244-109951269b5e" />
+
+
 **Pro Tip:** GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours.  
 
 To avoid losing your progress, be sure to **commit your changes regularly** — just like shown in the video demo below — so your updates are saved to your forked repository.
-
 
 https://github.com/user-attachments/assets/dd452ea1-3070-4718-af34-bea978e208ab
 
