@@ -47,8 +47,13 @@ Make sure to wait for algokit to be installed automatically - it should only tak
 3. **Give it a testrun!:** (WIP)
    - Click on run & debug
    - Run and deploy the hello world smart contract
-   - And then run dApp - check out what is already given to you!
+   - And then run dApp - check out what is already given to you. Or simply `npm run dev` in the CLI!
    <img width="1528" height="808" alt="image" src="https://github.com/user-attachments/assets/2f337d67-02e2-4b0c-8244-109951269b5e" />
+
+
+## For Local Devs:
+If `npm run dev` doesn’t work, run:   `npm install --save-dev @algorandfoundation/algokit-client-generator`
+And create your `.env` file by copying from the `.env.template`
 
 
 **Pro Tip:** GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours.  
