@@ -1,8 +1,9 @@
-// src/components/Tokenmint.tsx
 import { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { useSnackbar } from 'notistack'
 import { useMemo, useState } from 'react'
+import { AiOutlineDollarCircle, AiOutlineLoading3Quarters, AiOutlineInfoCircle } from 'react-icons/ai'
+import { BsCoin } from 'react-icons/bs'
 import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
 interface TokenMintProps {
@@ -80,64 +81,107 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
   }
 
   return (
-    <dialog id="token_modal" className={`modal ${openModal ? 'modal-open' : ''} bg-slate-200`}>
-      <form method="dialog" className="modal-box">
-        <h3 className="font-bold text-lg">Create a MasterPass Token (ASA)</h3>
-        <p className="text-sm text-gray-600 mb-4">
-          This creates a standard fungible token on Algorand (testnet). No IPFS needed.
+    <dialog
+      id="token_modal"
+      className={`modal modal-bottom sm:modal-middle backdrop-blur-sm ${openModal ? 'modal-open' : ''}`}
+    >
+      <div className="modal-box bg-neutral-800 text-gray-100 rounded-2xl shadow-xl border border-neutral-700 p-6">
+        <h3 className="flex items-center gap-3 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500 mb-2">
+          <BsCoin className="text-3xl" />
+          Create a MasterPass Token
+        </h3>
+        <p className="text-gray-400 text-sm mb-6">
+          This creates a standard fungible token (ASA) on the Algorand TestNet.
         </p>
 
-        <div className="grid grid-cols-1 gap-3">
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Asset name (e.g. MasterPass Token)"
-            value={assetName}
-            onChange={(e) => setAssetName(e.target.value)}
-          />
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Unit name (e.g. MPT)"
-            value={unitName}
-            onChange={(e) => setUnitName(e.target.value)}
-          />
-          <input
-            type="number"
-            min={1}
-            className="input input-bordered w-full"
-            placeholder="Total supply (e.g. 1000)"
-            value={total}
-            onChange={(e) => setTotal(e.target.value)}
-          />
-          <input
-            type="number"
-            min={0}
-            max={19}
-            className="input input-bordered w-full"
-            placeholder="Decimals (0 for whole tokens)"
-            value={decimals}
-            onChange={(e) => setDecimals(e.target.value)}
-          />
-          <p className="text-xs text-gray-500">
-            On-chain total = <code>total × 10^decimals</code>.
-            For beginners, leaving decimals at 0 is simplest.
-          </p>
+        <div className="space-y-4">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-gray-400">Asset Name</span>
+            </label>
+            <input
+              type="text"
+              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+              placeholder="e.g., MasterPass Token"
+              value={assetName}
+              onChange={(e) => setAssetName(e.target.value)}
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-gray-400">Unit Name</span>
+            </label>
+            <input
+              type="text"
+              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+              placeholder="e.g., MPT"
+              value={unitName}
+              onChange={(e) => setUnitName(e.target.value)}
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-gray-400">Total Supply</span>
+            </label>
+            <input
+              type="number"
+              min={1}
+              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+              placeholder="e.g., 1000"
+              value={total}
+              onChange={(e) => setTotal(e.target.value)}
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text text-gray-400">Decimals</span>
+            </label>
+            <input
+              type="number"
+              min={0}
+              max={19}
+              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+              placeholder="0 for whole tokens"
+              value={decimals}
+              onChange={(e) => setDecimals(e.target.value)}
+            />
+            <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
+              <AiOutlineInfoCircle />
+              <p>On-chain total = <code>total × 10^decimals</code>.</p>
+            </div>
+          </div>
         </div>
 
-        <div className="modal-action">
-          <button className="btn" onClick={() => setModalState(false)}>
-            Close
+        <div className="modal-action mt-6 flex flex-col-reverse sm:flex-row-reverse gap-3">
+          <button
+            type="button"
+            className={`btn w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white rounded-xl border-none font-semibold ${
+              assetName && unitName && total ? '' : 'btn-disabled opacity-50 cursor-not-allowed'
+            }`}
+            onClick={handleMintToken}
+            disabled={loading || !assetName || !unitName || !total}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <AiOutlineLoading3Quarters className="animate-spin" />
+                Creating...
+              </span>
+            ) : (
+              'Create Token'
+            )}
           </button>
           <button
             type="button"
-            className={`btn btn-success ${assetName && unitName && total ? '' : 'btn-disabled'}`}
-            onClick={handleMintToken}
+            className="btn w-full sm:w-auto bg-neutral-700 hover:bg-neutral-600 border-none text-gray-300 rounded-xl"
+            onClick={() => setModalState(false)}
           >
-            {loading ? <span className="loading loading-spinner" /> : 'Create Token'}
+            Close
           </button>
         </div>
-      </form>
+      </div>
     </dialog>
   )
 }

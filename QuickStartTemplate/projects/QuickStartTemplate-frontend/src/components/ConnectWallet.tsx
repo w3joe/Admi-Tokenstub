@@ -1,4 +1,5 @@
 import { useWallet, Wallet, WalletId } from '@txnlab/use-wallet-react'
+import { BsWallet2, BsCheckCircleFill } from 'react-icons/bs'
 import Account from './Account'
 
 interface ConnectWalletInterface {
@@ -12,15 +13,21 @@ const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
   const isKmd = (wallet: Wallet) => wallet.id === WalletId.KMD
 
   return (
-    <dialog id="connect_wallet_modal" className={`modal ${openModal ? 'modal-open' : ''}`}>
-      <form method="dialog" className="modal-box">
-        <h3 className="font-bold text-2xl">Select wallet provider</h3>
+    <dialog
+      id="connect_wallet_modal"
+      className={`modal modal-bottom sm:modal-middle backdrop-blur-sm ${openModal ? 'modal-open' : ''}`}
+    >
+      <div className="modal-box bg-neutral-800 text-gray-100 rounded-2xl shadow-xl border border-neutral-700 p-6">
+        <h3 className="flex items-center gap-3 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500 mb-6">
+          <BsWallet2 className="text-3xl" />
+          Select wallet provider
+        </h3>
 
-        <div className="grid m-2 pt-5">
+        <div className="space-y-4">
           {activeAddress && (
             <>
               <Account />
-              <div className="divider" />
+              <div className="h-px bg-neutral-700 my-4" />
             </>
           )}
 
@@ -28,7 +35,11 @@ const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
             wallets?.map((wallet) => (
               <button
                 data-test-id={`${wallet.id}-connect`}
-                className="btn border-teal-800 border-1  m-2"
+                className={`
+                  w-full flex items-center gap-4 p-4 rounded-xl transition-all duration-300 transform active:scale-95
+                  bg-neutral-700 hover:bg-neutral-600 border border-transparent
+                  focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-neutral-800
+                `}
                 key={`provider-${wallet.id}`}
                 onClick={() => {
                   return wallet.connect()
@@ -38,18 +49,23 @@ const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
                   <img
                     alt={`wallet_icon_${wallet.id}`}
                     src={wallet.metadata.icon}
-                    style={{ objectFit: 'contain', width: '30px', height: 'auto' }}
+                    className="w-8 h-8 object-contain rounded-md"
                   />
                 )}
-                <span>{isKmd(wallet) ? 'LocalNet Wallet' : wallet.metadata.name}</span>
+                <span className="font-semibold text-lg flex-1 text-left">
+                  {isKmd(wallet) ? 'LocalNet Wallet' : wallet.metadata.name}
+                </span>
+                {wallet.isActive && (
+                  <BsCheckCircleFill className="text-xl text-cyan-400" />
+                )}
               </button>
             ))}
         </div>
 
-        <div className="modal-action ">
+        <div className="modal-action mt-6">
           <button
             data-test-id="close-wallet-modal"
-            className="btn"
+            className="btn w-full sm:w-auto flex-1 bg-neutral-700 hover:bg-neutral-600 border-none text-gray-300 rounded-xl"
             onClick={() => {
               closeModal()
             }}
@@ -58,7 +74,7 @@ const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
           </button>
           {activeAddress && (
             <button
-              className="btn btn-warning"
+              className="btn w-full sm:w-auto flex-1 bg-red-600 hover:bg-red-500 border-none text-white rounded-xl"
               data-test-id="logout"
               onClick={async () => {
                 if (wallets) {
@@ -66,9 +82,6 @@ const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
                   if (activeWallet) {
                     await activeWallet.disconnect()
                   } else {
-                    // Required for logout/cleanup of inactive providers
-                    // For instance, when you login to localnet wallet and switch network
-                    // to testnet/mainnet or vice verse.
                     localStorage.removeItem('@txnlab/use-wallet:v3')
                     window.location.reload()
                   }
@@ -79,8 +92,9 @@ const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
             </button>
           )}
         </div>
-      </form>
+      </div>
     </dialog>
   )
 }
+
 export default ConnectWallet
