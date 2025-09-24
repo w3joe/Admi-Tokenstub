@@ -1,3 +1,7 @@
+// Transact.tsx
+// Simple payment component: send 1 ALGO from connected wallet → receiver address.
+// Uses Algokit + wallet connector. Designed for TestNet demos.
+
 import { algo, AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { useSnackbar } from 'notistack'
@@ -11,19 +15,25 @@ interface TransactInterface {
 }
 
 const Transact = ({ openModal, setModalState }: TransactInterface) => {
+  // UI state
   const [loading, setLoading] = useState<boolean>(false)
   const [receiverAddress, setReceiverAddress] = useState<string>('')
 
+  // Algorand client setup (TestNet by default from env)
   const algodConfig = getAlgodConfigFromViteEnvironment()
   const algorand = AlgorandClient.fromConfig({ algodConfig })
 
+  // Wallet + notifications
   const { enqueueSnackbar } = useSnackbar()
-
   const { transactionSigner, activeAddress } = useWallet()
 
+  // ------------------------------
+  // Handle sending payment
+  // ------------------------------
   const handleSubmitAlgo = async () => {
     setLoading(true)
 
+    // Guard: wallet must be connected
     if (!transactionSigner || !activeAddress) {
       enqueueSnackbar('Please connect wallet first', { variant: 'warning' })
       return
@@ -31,13 +41,18 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
 
     try {
       enqueueSnackbar('Sending transaction...', { variant: 'info' })
+
+      // 👇 Customize here: change amount or make it user input
       const result = await algorand.send.payment({
         signer: transactionSigner,
         sender: activeAddress,
-        receiver: receiverAddress,
-        amount: algo(1),
+        receiver: receiverAddress, // address typed in UI
+        amount: algo(1),           // fixed 1 ALGO payment
       })
-      enqueueSnackbar(`Transaction sent: ${result.txIds[0]}`, { variant: 'success' })
+
+      enqueueSnackbar(`✅ Transaction sent! TxID: ${result.txIds[0]}`, { variant: 'success' })
+
+      // Reset form
       setReceiverAddress('')
     } catch (e) {
       console.error(e)
@@ -47,6 +62,9 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
     setLoading(false)
   }
 
+  // ------------------------------
+  // Modal UI
+  // ------------------------------
   return (
     <dialog
       id="transact_modal"
@@ -58,6 +76,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
           Send a Payment
         </h3>
 
+        {/* Receiver Address input */}
         <div className="form-control">
           <label className="label">
             <span className="label-text text-gray-400">Receiver's Address</span>
@@ -68,10 +87,9 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
             className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
             placeholder="e.g., KPLX..."
             value={receiverAddress}
-            onChange={(e) => {
-              setReceiverAddress(e.target.value)
-            }}
+            onChange={(e) => setReceiverAddress(e.target.value)}
           />
+          {/* Address length check for Algorand (58 chars) */}
           <div className="flex justify-between items-center text-xs mt-2">
             <span className="text-gray-500">Amount: 1 ALGO</span>
             <span className={`font-mono ${receiverAddress.length === 58 ? 'text-green-400' : 'text-red-400'}`}>
@@ -80,6 +98,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
           </div>
         </div>
 
+        {/* Action buttons */}
         <div className="modal-action mt-6 flex flex-col-reverse sm:flex-row-reverse gap-3">
           <button
             data-test-id="send-algo"

@@ -1,8 +1,12 @@
+// Tokenmint.tsx
+// Create a standard fungible token (ASA) on Algorand TestNet.
+// Users can set asset name, unit name, total supply, and decimals.
+
 import { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { useSnackbar } from 'notistack'
 import { useMemo, useState } from 'react'
-import { AiOutlineDollarCircle, AiOutlineLoading3Quarters, AiOutlineInfoCircle } from 'react-icons/ai'
+import { AiOutlineLoading3Quarters, AiOutlineInfoCircle } from 'react-icons/ai'
 import { BsCoin } from 'react-icons/bs'
 import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
@@ -12,26 +16,32 @@ interface TokenMintProps {
 }
 
 const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
-  const [assetName, setAssetName] = useState<string>('MasterPass Token')
-  const [unitName, setUnitName] = useState<string>('MPT')
-  const [total, setTotal] = useState<string>('1000') // human-readable total (before decimals)
-  const [decimals, setDecimals] = useState<string>('0') // beginner-friendly default
+  // 👇 Default placeholder values (safe customization points for learners)
+  const [assetName, setAssetName] = useState<string>('MasterPass Token') // token name
+  const [unitName, setUnitName] = useState<string>('MPT')               // short ticker
+  const [total, setTotal] = useState<string>('1000')                    // human-readable total
+  const [decimals, setDecimals] = useState<string>('0')                 // 0 = whole tokens only
 
   const [loading, setLoading] = useState<boolean>(false)
 
+  // Wallet + notifications
   const { transactionSigner, activeAddress } = useWallet()
   const { enqueueSnackbar } = useSnackbar()
 
+  // Algorand client (TestNet from Vite env)
   const algodConfig = getAlgodConfigFromViteEnvironment()
   const algorand = useMemo(() => AlgorandClient.fromConfig({ algodConfig }), [algodConfig])
 
+  // ------------------------------
+  // Handle Token Creation
+  // ------------------------------
   const handleMintToken = async () => {
     if (!transactionSigner || !activeAddress) {
       enqueueSnackbar('Please connect your wallet first.', { variant: 'warning' })
       return
     }
 
-    // Basic validation
+    // Basic validation checks
     if (!assetName || !unitName) {
       enqueueSnackbar('Please enter an asset name and unit name.', { variant: 'warning' })
       return
@@ -52,22 +62,23 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
       const totalBig = BigInt(total)
       const decimalsBig = BigInt(decimals)
 
-      // Convert human-readable total to base units: total * 10^decimals
+      // On-chain total supply = total × 10^decimals
       const onChainTotal = totalBig * 10n ** decimalsBig
 
+      // 👇 Learners can customize all of these ASA parameters
       const createResult = await algorand.send.assetCreate({
         sender: activeAddress,
         signer: transactionSigner,
         total: onChainTotal,
         decimals: Number(decimalsBig),
-        assetName,
-        unitName,
+        assetName,   // <— customize token name
+        unitName,    // <— customize unit/ticker
         defaultFrozen: false,
       })
 
       enqueueSnackbar(`✅ Token Created! ASA ID: ${createResult.assetId}`, { variant: 'success' })
 
-      // Reset form
+      // Reset back to defaults after successful mint
       setAssetName('MasterPass Token')
       setUnitName('MPT')
       setTotal('1000')
@@ -80,6 +91,9 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
     }
   }
 
+  // ------------------------------
+  // Modal UI
+  // ------------------------------
   return (
     <dialog
       id="token_modal"
@@ -94,7 +108,9 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
           This creates a standard fungible token (ASA) on the Algorand TestNet.
         </p>
 
+        {/* Input fields for customization */}
         <div className="space-y-4">
+          {/* Asset Name */}
           <div className="form-control">
             <label className="label">
               <span className="label-text text-gray-400">Asset Name</span>
@@ -108,6 +124,7 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
             />
           </div>
 
+          {/* Unit Name */}
           <div className="form-control">
             <label className="label">
               <span className="label-text text-gray-400">Unit Name</span>
@@ -121,6 +138,7 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
             />
           </div>
 
+          {/* Total Supply */}
           <div className="form-control">
             <label className="label">
               <span className="label-text text-gray-400">Total Supply</span>
@@ -135,6 +153,7 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
             />
           </div>
 
+          {/* Decimals */}
           <div className="form-control">
             <label className="label">
               <span className="label-text text-gray-400">Decimals</span>
@@ -155,6 +174,7 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
           </div>
         </div>
 
+        {/* Action buttons */}
         <div className="modal-action mt-6 flex flex-col-reverse sm:flex-row-reverse gap-3">
           <button
             type="button"

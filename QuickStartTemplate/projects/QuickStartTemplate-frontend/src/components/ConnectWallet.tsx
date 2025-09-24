@@ -1,3 +1,9 @@
+// ConnectWallet.tsx
+// Modal for selecting and connecting a wallet provider (Pera, Defly, KMD, etc).
+// Uses @txnlab/use-wallet-react to manage multiple wallet options.
+// 🔹 You don’t need to change logic in this file — it “just works”.
+// 🔹 Safe place to redesign the modal UI if you want a different look.
+
 import { useWallet, Wallet, WalletId } from '@txnlab/use-wallet-react'
 import { BsWallet2, BsCheckCircleFill } from 'react-icons/bs'
 import Account from './Account'
@@ -10,6 +16,7 @@ interface ConnectWalletInterface {
 const ConnectWallet = ({ openModal, closeModal }: ConnectWalletInterface) => {
   const { wallets, activeAddress } = useWallet()
 
+  // Detect KMD (LocalNet dev wallet) since it has no icon
   const isKmd = (wallet: Wallet) => wallet.id === WalletId.KMD
 
   return (

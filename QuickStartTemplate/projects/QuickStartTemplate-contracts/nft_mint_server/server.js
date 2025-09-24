@@ -1,4 +1,10 @@
-// server.js (ESM, plain JS)
+// -----------------------------
+// server.js
+// -----------------------------
+// This backend handles image uploads, pins them (and metadata) to Pinata/IPFS,
+// and returns a metadata URL that the frontend can use to mint an NFT on Algorand.
+// -----------------------------
+
 import express from 'express'
 import cors from 'cors'
 import multer from 'multer'
@@ -11,24 +17,32 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 3001
 
-// CORS (no credentials used, so '*' is fine)
+// Allow requests from the frontend (CORS).
+// '*' is fine for development; in production, restrict to your app’s URL.
 app.use(cors({ origin: '*' }))
+
+// Parse JSON payloads (mainly useful if you add more routes later).
 app.use(express.json())
 
+// Log whether environment variables are being read properly.
+// Developers will need to set their own API keys in .env (never commit secrets).
 console.log('Backend server starting...')
 console.log('Pinata API Key:', process.env.PINATA_API_KEY ? 'Loaded' : 'Not Loaded')
 console.log('Pinata API Secret:', process.env.PINATA_API_SECRET ? 'Loaded' : 'Not Loaded')
 console.log('Pinata JWT:', process.env.PINATA_JWT ? 'Loaded' : 'Not Loaded')
 
-// Multer in-memory storage so req.file.buffer exists
+// Multer setup: keep uploaded files in memory (not saved to disk).
+// This makes it easier to forward the file directly to Pinata.
 const upload = multer({ storage: multer.memoryStorage() })
 
-// ---- Pinata init (JWT preferred, fallback to key/secret) ----
+// Pinata client setup.
+// By default this uses API key + secret from your .env.
 const pinata = process.env.PINATA_JWT
   ? new pinataSDK({ pinataJWTKey: process.env.PINATA_JWT })
   : new pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET)
 
-// Verify credentials at startup (helps surface bad keys early)
+// Test Pinata credentials when the server starts.
+// If this fails, check your .env file.
 ;(async () => {
   try {
     const auth = await pinata.testAuthentication?.()
@@ -38,13 +52,20 @@ const pinata = process.env.PINATA_JWT
   }
 })()
 
-// Health
+// Simple health endpoint so the frontend (or you) can check if the server is live.
 app.get('/health', (_req, res) => {
   res.set('Cache-Control', 'no-store')
   res.json({ ok: true, ts: Date.now() })
 })
 
-// Main endpoint to pin the image and metadata
+// -----------------------------
+// Main endpoint: /api/pin-image
+// -----------------------------
+// 1. Accepts an image file from the frontend
+// 2. Pins the file to Pinata/IPFS
+// 3. Creates NFT metadata JSON pointing to that image
+// 4. Pins metadata JSON to IPFS
+// 5. Returns the metadata URL for use in Algorand NFT minting
 app.post('/api/pin-image', upload.single('file'), async (req, res) => {
   console.log('API endpoint /api/pin-image was hit!')
   try {
@@ -59,12 +80,14 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
       mimetype: file.mimetype,
     })
 
-    // 1) Buffer -> Readable stream for Pinata
+    // Convert the uploaded buffer into a Readable stream (Pinata expects a stream).
     const stream = Readable.from(file.buffer)
-    // Give Pinata a filename hint
+    // Give the stream a path so Pinata names it properly.
+    // (You can customize naming here if you want.)
     // @ts-ignore (JS file): attach path so sdk has a name
     stream.path = file.originalname || 'upload'
 
+    // Pin the image to IPFS
     const imageOptions = {
       pinataMetadata: { name: file.originalname || 'MasterPass Ticket Image' },
     }
@@ -72,7 +95,7 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
     const imageUrl = `ipfs://${imageResult.IpfsHash}`
     console.log('Image pinned to IPFS:', imageUrl)
 
-    // 2) NFT metadata JSON
+    // Build NFT metadata JSON (customize name/description/properties here).
     const metadata = {
       name: 'NFT Example',
       description: 'This is an unchangeable NFT',
@@ -80,16 +103,17 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
       properties: {},
     }
 
+    // Pin the metadata JSON to IPFS
     const jsonOptions = { pinataMetadata: { name: 'MasterPass Ticket Metadata' } }
     const jsonResult = await pinata.pinJSONToIPFS(metadata, jsonOptions)
     const metadataUrl = `ipfs://${jsonResult.IpfsHash}`
     console.log('Successfully pinned metadata. URL:', metadataUrl)
 
-    // 3) Respond
+    // Respond back to the frontend with the metadata URL
     res.status(200).json({ metadataUrl })
     console.log('Response sent to frontend.')
   } catch (error) {
-    // Deep error logging to see Pinata details
+    // Log detailed error info for debugging.
     const details = {
       message: error?.message,
       status: error?.status || error?.response?.status,
@@ -98,6 +122,7 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
     }
     console.error('Error in /api/pin-image:', details)
 
+    // Send a simplified error message to the frontend.
     const msg =
       (typeof details.data === 'string' && details.data) ||
       details.data?.error ||
@@ -107,6 +132,7 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
   }
 })
 
+// Start the server
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`)
 })
