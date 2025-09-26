@@ -1,5 +1,5 @@
 // Transact.tsx
-// Simple payment component: send 1 ALGO from connected wallet → receiver address.
+// Simple payment component: send 1 ALGO or 1 USDC from connected wallet → receiver address.
 // Uses Algokit + wallet connector. Designed for TestNet demos.
 
 import { algo, AlgorandClient } from '@algorandfoundation/algokit-utils'
@@ -18,6 +18,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
   // UI state
   const [loading, setLoading] = useState<boolean>(false)
   const [receiverAddress, setReceiverAddress] = useState<string>('')
+  const [assetType, setAssetType] = useState<'ALGO' | 'USDC'>('ALGO') // toggle between ALGO and USDC
 
   // Algorand client setup (TestNet by default from env)
   const algodConfig = getAlgodConfigFromViteEnvironment()
@@ -27,10 +28,14 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
   const { enqueueSnackbar } = useSnackbar()
   const { transactionSigner, activeAddress } = useWallet()
 
+  // USDC constants (TestNet ASA)
+  const usdcAssetId = 10458941n
+  const usdcDecimals = 6
+
   // ------------------------------
   // Handle sending payment
   // ------------------------------
-  const handleSubmitAlgo = async () => {
+  const handleSubmit = async () => {
     setLoading(true)
 
     // Guard: wallet must be connected
@@ -40,23 +45,69 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
     }
 
     try {
-      enqueueSnackbar('Sending transaction...', { variant: 'info' })
+      enqueueSnackbar(`Sending ${assetType} transaction...`, { variant: 'info' })
 
-      // 👇 Customize here: change amount or make it user input
-      const result = await algorand.send.payment({
-        signer: transactionSigner,
-        sender: activeAddress,
-        receiver: receiverAddress, // address typed in UI
-        amount: algo(1),           // fixed 1 ALGO payment
-      })
-
-      enqueueSnackbar(`✅ Transaction sent! TxID: ${result.txIds[0]}`, { variant: 'success' })
+      if (assetType === 'ALGO') {
+        // Send 1 ALGO
+        const result = await algorand.send.payment({
+          signer: transactionSigner,
+          sender: activeAddress,
+          receiver: receiverAddress,
+          amount: algo(1),
+        })
+        enqueueSnackbar(`✅ 1 ALGO sent! TxID: ${result.txIds[0]}`, { variant: 'success' })
+      } else {
+        // Send 1 USDC (convert to base units: 1 * 10^decimals)
+        const usdcAmount = 1n * 10n ** BigInt(usdcDecimals)
+        const result = await algorand.send.assetTransfer({
+          signer: transactionSigner,
+          sender: activeAddress,
+          receiver: receiverAddress,
+          assetId: usdcAssetId,
+          amount: usdcAmount,
+        })
+        enqueueSnackbar(`✅ 1 USDC sent! TxID: ${result.txIds[0]}`, { variant: 'success' })
+      }
 
       // Reset form
       setReceiverAddress('')
+
+      // -----------------------------------------------------
+      // Group transaction example (covered in Session 6)
+      // This shows payment + asset opt-in + asset transfer
+      // -----------------------------------------------------
+      /*
+      const groupTx = algorand.newGroup()
+
+      groupTx.addPayment({
+        signer: account1!.signer,
+        sender: account1!.addr,
+        receiver: account2!.addr,
+        amount: algo(0.20),
+        staticFee: algo(0.003),
+      })
+
+      groupTx.addAssetOptIn({
+        signer: account2!.signer,
+        sender: account2!.addr,
+        assetId: usdcAssetId, // 10458941n
+        staticFee: algo(0),
+      })
+
+      groupTx.addAssetTransfer({
+        signer: account1!.signer,
+        sender: account1!.addr,
+        assetId: usdcAssetId,
+        amount: BigInt(0.1 * 10 ** usdcDecimals),
+        receiver: account2!.addr,
+        staticFee: algo(0),
+      })
+
+      const txResult = await groupTx.send()
+      */
     } catch (e) {
       console.error(e)
-      enqueueSnackbar('Failed to send transaction', { variant: 'error' })
+      enqueueSnackbar(`Failed to send ${assetType}`, { variant: 'error' })
     }
 
     setLoading(false)
@@ -91,23 +142,45 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
           />
           {/* Address length check for Algorand (58 chars) */}
           <div className="flex justify-between items-center text-xs mt-2">
-            <span className="text-gray-500">Amount: 1 ALGO</span>
+            <span className="text-gray-500">Amount: 1 {assetType}</span>
             <span className={`font-mono ${receiverAddress.length === 58 ? 'text-green-400' : 'text-red-400'}`}>
               {receiverAddress.length}/58
             </span>
           </div>
         </div>
 
+        {/* Toggle ALGO ↔ USDC */}
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            type="button"
+            className={`px-4 py-2 rounded-lg font-semibold transition ${
+              assetType === 'ALGO' ? 'bg-cyan-600 text-white' : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
+            }`}
+            onClick={() => setAssetType('ALGO')}
+          >
+            ALGO
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded-lg font-semibold transition ${
+              assetType === 'USDC' ? 'bg-cyan-600 text-white' : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
+            }`}
+            onClick={() => setAssetType('USDC')}
+          >
+            USDC
+          </button>
+        </div>
+
         {/* Action buttons */}
         <div className="modal-action mt-6 flex flex-col-reverse sm:flex-row-reverse gap-3">
           <button
-            data-test-id="send-algo"
+            data-test-id="send"
             type="button"
             className={`
               btn w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white rounded-xl border-none font-semibold transition-all duration-300 transform active:scale-95
               ${receiverAddress.length === 58 ? '' : 'btn-disabled opacity-50 cursor-not-allowed'}
             `}
-            onClick={handleSubmitAlgo}
+            onClick={handleSubmit}
             disabled={loading || receiverAddress.length !== 58}
           >
             {loading ? (
@@ -116,7 +189,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
                 Sending...
               </span>
             ) : (
-              'Send 1 Algo'
+              `Send 1 ${assetType}`
             )}
           </button>
           <button
