@@ -7,11 +7,5 @@
     "5173": { "label": "vite" },
     "3001": { "label": "backend" }
   },
-  "postCreateCommand": [
-    "pip3 install py-algorand-sdk python-dotenv",
-    "pipx install algokit || true",
-    "pip install algokit-utils || true",
-    "npm ci --include=dev || npm install --include=dev",
-    "npm i -g concurrently @algorandfoundation/algokit-client-generator || true"
-  ]
+  "postCreateCommand": "pip3 install py-algorand-sdk python-dotenv && pipx install algokit && pip install algokit-utils && npm install --save-dev @algorandfoundation/algokit-client-generator concurrently"
 }
