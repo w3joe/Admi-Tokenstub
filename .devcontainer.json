@@ -1,18 +1,17 @@
 {
-  "forwardPorts": [4001, 4002, 8980, 5173],
+  "forwardPorts": [4001, 4002, 8980, 5173, 3001],
   "portsAttributes": {
-    "4001": {
-      "label": "algod"
-    },
-    "4002": {
-      "label": "kmd"
-    },
-    "8980": {
-      "label": "indexer"
-    },
-    "5173": {
-      "label": "vite"
-    }
+    "4001": { "label": "algod" },
+    "4002": { "label": "kmd" },
+    "8980": { "label": "indexer" },
+    "5173": { "label": "vite" },
+    "3001": { "label": "backend" }
   },
- "postCreateCommand": "pip3 install py-algorand-sdk python-dotenv && pipx install algokit && pip install algokit-utils && npm install --save-dev @algorandfoundation/algokit-client-generator"
+  "postCreateCommand": [
+    "pip3 install py-algorand-sdk python-dotenv",
+    "pipx install algokit || true",
+    "pip install algokit-utils || true",
+    "npm ci --include=dev || npm install --include=dev",
+    "npm i -g concurrently @algorandfoundation/algokit-client-generator || true"
+  ]
 }
