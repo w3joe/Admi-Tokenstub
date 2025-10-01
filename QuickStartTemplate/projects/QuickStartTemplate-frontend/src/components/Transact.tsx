@@ -15,6 +15,8 @@ interface TransactInterface {
 }
 
 const Transact = ({ openModal, setModalState }: TransactInterface) => {
+  const LORA = 'https://lora.algokit.io/testnet';
+
   // UI state
   const [loading, setLoading] = useState<boolean>(false)
   const [receiverAddress, setReceiverAddress] = useState<string>('')
@@ -55,10 +57,10 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
           receiver: receiverAddress,
           amount: algo(1),
         })
-        enqueueSnackbar(`✅ 1 ALGO sent! TxID: ${result.txIds[0]}`, { variant: 'success' })
       } else {
         // Send 1 USDC (convert to base units: 1 * 10^decimals)
         const usdcAmount = 1n * 10n ** BigInt(usdcDecimals)
+        
         const result = await algorand.send.assetTransfer({
           signer: transactionSigner,
           sender: activeAddress,
@@ -66,8 +68,32 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
           assetId: usdcAssetId,
           amount: usdcAmount,
         })
-        enqueueSnackbar(`✅ 1 USDC sent! TxID: ${result.txIds[0]}`, { variant: 'success' })
       }
+
+      // 👇 Customize here: change amount or make it user input
+      const result = await algorand.send.payment({
+        signer: transactionSigner,
+        sender: activeAddress,
+        receiver: receiverAddress, // address typed in UI
+        amount: algo(1),           // fixed 1 ALGO payment
+      })
+
+     const txId = result?.txIds?.[0];
+
+    enqueueSnackbar(`✅ Success! TxID: ${txId}`, {
+      variant: 'success',
+      action: () =>
+        txId ? (
+          <a
+            href={`${LORA}/transaction/${txId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'underline', marginLeft: 8 }}
+          >
+            View on Lora ↗
+          </a>
+        ) : null,
+    });
 
       // Reset form
       setReceiverAddress('')

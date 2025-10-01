@@ -16,6 +16,8 @@ interface TokenMintProps {
 }
 
 const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
+  const LORA = 'https://lora.algokit.io/testnet';
+
   // 👇 Default placeholder values (safe customization points for learners)
   const [assetName, setAssetName] = useState<string>('MasterPass Token') // token name
   const [unitName, setUnitName] = useState<string>('MPT')               // short ticker
@@ -76,7 +78,22 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
         defaultFrozen: false,
       })
 
-      enqueueSnackbar(`✅ Token Created! ASA ID: ${createResult.assetId}`, { variant: 'success' })
+      const id = createResult;
+
+      enqueueSnackbar(`✅ Success! Asset ID: ${id.assetId}`, {
+        variant: 'success',
+        action: () =>
+          id ? (
+            <a
+              href={`${LORA}/asset/${id.assetId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'underline', marginLeft: 8 }}
+            >
+              View on Lora ↗
+            </a>
+          ) : null,
+      });
 
       // Reset back to defaults after successful mint
       setAssetName('MasterPass Token')

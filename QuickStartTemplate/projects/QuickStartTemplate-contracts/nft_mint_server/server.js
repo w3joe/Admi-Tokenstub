@@ -132,7 +132,9 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
   }
 })
 
+const PORT = process.env.PORT || 3001;
+
 // Start the server
-app.listen(port, () => {
-  console.log(`Backend listening at http://localhost:${port}`)
-})
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Backend listening at http://localhost:${port}`);
+});

@@ -16,6 +16,8 @@ interface NFTMintProps {
 }
 
 const NFTmint = ({ openModal, setModalState }: NFTMintProps) => {
+  const LORA = 'https://lora.algokit.io/testnet';
+
   // UI state: file, preview image, and loading spinner
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>('')
@@ -131,7 +133,22 @@ const NFTmint = ({ openModal, setModalState }: NFTMintProps) => {
         defaultFrozen: false,
       })
 
-      enqueueSnackbar(`✅ NFT Minted! ASA ID: ${createNFTResult.assetId}`, { variant: 'success' })
+      const id = createNFTResult;
+
+      enqueueSnackbar(`✅ Success! Asset ID: ${id.assetId}`, {
+        variant: 'success',
+        action: () =>
+          id ? (
+            <a
+              href={`${LORA}/asset/${id.assetId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'underline', marginLeft: 8 }}
+            >
+              View on Lora ↗
+            </a>
+          ) : null,
+      });
       
       // Reset form + close modal
       setSelectedFile(null)

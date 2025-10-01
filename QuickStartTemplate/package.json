@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "bootstrap": "algokit project bootstrap all",
+    "dev": "concurrently -k -n FRONTEND,SERVER -c auto \"cd projects/QuickStartTemplate-frontend && npm run dev\" \"cd projects/QuickStartTemplate-contracts/nft_mint_server && node server.js\"",
+    "dev:boot": "npm run bootstrap && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
