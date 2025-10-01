@@ -49,38 +49,32 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
     try {
       enqueueSnackbar(`Sending ${assetType} transaction...`, { variant: 'info' })
 
-      if (assetType === 'ALGO') {
-        // Send 1 ALGO
-        const result = await algorand.send.payment({
-          signer: transactionSigner,
-          sender: activeAddress,
-          receiver: receiverAddress,
-          amount: algo(1),
-        })
-      } else {
-        // Send 1 USDC (convert to base units: 1 * 10^decimals)
-        const usdcAmount = 1n * 10n ** BigInt(usdcDecimals)
-        
-        const result = await algorand.send.assetTransfer({
-          signer: transactionSigner,
-          sender: activeAddress,
-          receiver: receiverAddress,
-          assetId: usdcAssetId,
-          amount: usdcAmount,
-        })
-      }
+      let txResult;
+    let msg;
 
-      // 👇 Customize here: change amount or make it user input
-      const result = await algorand.send.payment({
+    if (assetType === 'ALGO') {
+      txResult = await algorand.send.payment({
         signer: transactionSigner,
         sender: activeAddress,
-        receiver: receiverAddress, // address typed in UI
-        amount: algo(1),           // fixed 1 ALGO payment
-      })
+        receiver: receiverAddress,
+        amount: algo(1),
+      });
+      msg = '✅ 1 ALGO sent!';
+    } else {
+      const usdcAmount = 1n * 10n ** BigInt(usdcDecimals);
+      txResult = await algorand.send.assetTransfer({
+        signer: transactionSigner,
+        sender: activeAddress,
+        receiver: receiverAddress,
+        assetId: usdcAssetId,
+        amount: usdcAmount,
+      });
+      msg = '✅ 1 USDC sent!';
+    }
 
-     const txId = result?.txIds?.[0];
+    const txId = txResult?.txIds?.[0];
 
-    enqueueSnackbar(`✅ Success! TxID: ${txId}`, {
+    enqueueSnackbar(`${msg} TxID: ${txId}`, {
       variant: 'success',
       action: () =>
         txId ? (

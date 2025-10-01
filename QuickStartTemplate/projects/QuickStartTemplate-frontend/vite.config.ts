@@ -14,7 +14,7 @@ export default defineConfig({
     }),
   ],
   server: {
-    host: true,      // expose on 0.0.0.0 for Codespaces
+    host: 'localhost',      // expose on 0.0.0.0 for Codespaces
     port: 5173,
     strictPort: true // fail instead of picking a random port
     // If HMR ever misbehaves in Codespaces, uncomment:
