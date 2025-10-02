@@ -69,13 +69,16 @@ Make sure to wait for algokit to be installed automatically - it should only tak
      4. Follow the instructions inside `.env.template` to generate your **Pinata API Key** and **Secret Key**, and replace the placeholders in your new `.env` file.
 
    - **Final Step: Start the project**  
-     Once your `.env` file is ready, run the following command to start the development server:  
+     Once your `.env` file is ready, run the command below to start the project, then open the localhost URL shown in your terminal:
 
      ```bash
      npm run dev
      ```
-   
+  
+     After running this command, you’ll see a pop-up in the bottom-right corner (screenshot below). 👉 Click `Set public` and your ready to go!
+     <img width="902" height="212" alt="image" src="https://github.com/user-attachments/assets/20178fa4-047b-4337-bd89-663c173a589d" />
 
+   
 **Pro Tip:** GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours.  
 
 To avoid losing your progress, be sure to **commit your changes regularly** — just like shown in the video demo below — so your updates are saved to your forked repository.
@@ -86,12 +89,13 @@ https://github.com/user-attachments/assets/dd452ea1-3070-4718-af34-bea978e208ab
 ## Project Structure Simplified
 
 **Front-end Files**
-- `projects/QuickStartTemplate-frontend/src/` — Frontend code (The webpage)  
+- `projects/QuickStartTemplate-frontend/src/` — Frontend code files
+- `projects/QuickStartTemplate-frontend/src/Home.tsx` - Homepage (you can design this page)
 - `projects/QuickStartTemplate-frontend/src/App.tsx` — Main app layout and routing  
 - `projects/QuickStartTemplate-frontend/src/components/Transact.tsx` — Simple transfer ALGO and USDC logic 
 - `projects/QuickStartTemplate-frontend/src/components/NFTmint.tsx` — Simple NFT minting interface  
 - `projects/QuickStartTemplate-frontend/src/components/Tokenmint.tsx` — Simple token (ASA) minting interface  
-- `projects/QuickStartTemplate-frontend/src/components/AppCalls.tsx` — Smart contract interaction demo  
+- `projects/QuickStartTemplate-frontend/src/components/AppCalls.tsx` — Smart contract interaction demo
 
 **Back-end Files**
 - `projects/QuickStartTemplate-contracts/smart_contracts/hello_world/contract.algo.ts` — Example TypeScript smart contract (Default AlgoKit Hello World)  
