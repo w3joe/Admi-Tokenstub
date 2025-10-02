@@ -3,9 +3,9 @@
 This is a full-stack starter template for quickly building and testing Web3 ideas on Algorand. It includes:
 
 - Wallet connection
-- Send ALGO payments
+- Send ALGO or USDC payments
 - NFT minting (IPFS metadata via Pinata)
-- Token (ASA) creation
+- Asset (ASA) creation
 - Smart contract interaction demo
 
 Use this template to kickstart your project, prototype ideas, and showcase a working proof-of-concept.
@@ -44,11 +44,37 @@ Make sure to wait for algokit to be installed automatically - it should only tak
    - Enter the workspace 
    <img width="2794" height="1524" alt="image" src="https://github.com/user-attachments/assets/41f25490-1284-4998-b342-27f7a0ffb420" />
 
-3. **Give it a testrun!:** (WIP)
-   - Click on run & debug
-   - Run and deploy the hello world smart contract
-   - And then run dApp - check out what is already given to you. Or simply `npm run dev` in the CLI!
-   <img width="1528" height="808" alt="image" src="https://github.com/user-attachments/assets/2f337d67-02e2-4b0c-8244-109951269b5e" />
+3. **While in Workspace:**
+
+   > 💡 **Note:** You can stay in the **root directory** of the project when running these commands.  
+   > (This is usually the folder automatically opened when entering the Codespace, so you don’t need to move elsewhere.)
+
+   - Run this command in your terminal:  
+     ```bash
+     npm run setup
+     ```
+   - Wait until all installations are completed.
+
+   - **IMPORTANT: Environment Setup**  
+     You need to create a new `.env` file in the following path:  
+
+     ```
+     /workspaces/Algorand-dApp-Quick-Start-Template-TypeScript/QuickStartTemplate/projects/QuickStartTemplate-contracts/nft_mint_server
+     ```
+
+     Inside that folder, you will already find a file named `.env.template`.  
+     1. Copy all the contents of `.env.template`.  
+     2. Create a new file named `.env` in the same folder.  
+     3. Paste the copied content into your `.env`.  
+     4. Follow the instructions inside `.env.template` to generate your **Pinata API Key** and **Secret Key**, and replace the placeholders in your new `.env` file.
+
+   - **Final Step: Start the project**  
+     Once your `.env` file is ready, run the following command to start the development server:  
+
+     ```bash
+     npm run dev
+     ```
+   
 
 **Pro Tip:** GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours.  
 
@@ -57,21 +83,19 @@ To avoid losing your progress, be sure to **commit your changes regularly** — 
 https://github.com/user-attachments/assets/dd452ea1-3070-4718-af34-bea978e208ab
 
 
-## For Local Devs:
-If `npm run dev` doesn’t work, run:   `npm install --save-dev @algorandfoundation/algokit-client-generator`
-
-And create your `.env` file by copying from the `.env.template`
-
-
 ## Project Structure Simplified
 
+**Front-end Files**
 - `projects/QuickStartTemplate-frontend/src/` — Frontend code (The webpage)  
 - `projects/QuickStartTemplate-frontend/src/App.tsx` — Main app layout and routing  
-- `projects/QuickStartTemplate-frontend/src/components/Transact.tsx` — Simple transfer ALGO logic (Provided to you thanks to AlgoKit)  
+- `projects/QuickStartTemplate-frontend/src/components/Transact.tsx` — Simple transfer ALGO and USDC logic 
 - `projects/QuickStartTemplate-frontend/src/components/NFTmint.tsx` — Simple NFT minting interface  
 - `projects/QuickStartTemplate-frontend/src/components/Tokenmint.tsx` — Simple token (ASA) minting interface  
 - `projects/QuickStartTemplate-frontend/src/components/AppCalls.tsx` — Smart contract interaction demo  
-- `projects/QuickStartTemplate-contracts/smart_contracts/hello_world/contract.algo.ts` — Example TypeScript smart contract  
+
+**Back-end Files**
+- `projects/QuickStartTemplate-contracts/smart_contracts/hello_world/contract.algo.ts` — Example TypeScript smart contract (Default AlgoKit Hello World)  
+- `projects/QuickStartTemplate-contracts/nft_mint_server/` — Backend server for NFT minting (contains `.env.template` and where you create your own `.env`)  
 
 
 ## Reference Guide
