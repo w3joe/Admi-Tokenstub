@@ -3,13 +3,10 @@
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "forwardPorts": [5173, 3001],
   "portsAttributes": {
-  "5173": { "onAutoForward": "openBrowser" },
-  "3001": { "onAutoForward": "notify", "visibility": "public" }
-},
-  "postCreateCommand": "npm ci || true",
-  "postAttachCommand": {
-    "start": "npm run dev:boot"
+    "5173": { "onAutoForward": "openBrowser" },
+    "3001": { "onAutoForward": "notify", "visibility": "public" }
   },
+  "postAttachCommand": { "start": "npm run dev:boot" },
   "customizations": {
     "vscode": {
       "extensions": [

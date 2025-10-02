@@ -1,10 +1,13 @@
 {
   "scripts": {
     "bootstrap": "algokit project bootstrap all",
-    "dev": "concurrently -k -n FRONTEND,SERVER -c auto \"cd projects/QuickStartTemplate-frontend && npm run dev\" \"cd projects/QuickStartTemplate-contracts/nft_mint_server && node server.js\"",
+
+    "predev": "npm run deps",
+    "deps": "npm run deps:frontend && npm run deps:backend",
+    "deps:frontend": "npm -C projects/QuickStartTemplate-frontend ci || npm -C projects/QuickStartTemplate-frontend install",
+    "deps:backend": "npm -C projects/QuickStartTemplate-contracts ci || npm -C projects/QuickStartTemplate-contracts install",
+
+    "dev": "npx -y concurrently -k -n FRONTEND,SERVER -c auto \"cd projects/QuickStartTemplate-frontend && npm run dev\" \"cd projects/QuickStartTemplate-contracts/nft_mint_server && node server.js\"",
     "dev:boot": "npm run bootstrap && npm run dev"
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.1"
   }
 }
