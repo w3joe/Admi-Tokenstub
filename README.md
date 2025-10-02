@@ -58,9 +58,9 @@ Make sure to wait for algokit to be installed automatically - it should only tak
    - **IMPORTANT: Environment Setup**  
      You need to create a new `.env` file in the following path:  
 
-     ```
-     /workspaces/Algorand-dApp-Quick-Start-Template-TypeScript/QuickStartTemplate/projects/QuickStartTemplate-contracts/nft_mint_server
-     ```
+     
+     `QuickStartTemplate-contracts/nft_mint_server`
+   
 
      Inside that folder, you will already find a file named `.env.template`.  
      1. Copy all the contents of `.env.template`.  
