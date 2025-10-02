@@ -6,7 +6,7 @@
     "deps:backend:needed": "bash -lc 'DIR=projects/QuickStartTemplate-contracts; [ -d \"$DIR/node_modules\" ] || (npm -C \"$DIR\" ci || npm -C \"$DIR\" install)'",
     "deps:needed": "npm run deps:frontend:needed && npm run deps:backend:needed",
 
-    "install": "npm run deps:needed && npm run bootstrap",
+    "setup": "npm run deps:needed && npm run bootstrap",
 
     "dev": "npx -y concurrently -k -n FRONTEND,SERVER -c auto \"cd projects/QuickStartTemplate-frontend && npm run dev\" \"cd projects/QuickStartTemplate-contracts && node nft_mint_server/server.js\""
   }
