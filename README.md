@@ -47,7 +47,7 @@ Make sure to wait for algokit to be installed automatically - it should only tak
 3. **While in Workspace:**
 
    > 💡 **Note:** You can stay in the **root directory** of the project when running these commands.  
-   > (This is usually the folder automatically opened when entering the Codespace, so you don’t need to move elsewhere.)
+   > (This is usually the folder automatically opened when entering the Workspace, so you don’t need to move elsewhere.)
 
    - Run this command in your terminal:  
      ```bash
