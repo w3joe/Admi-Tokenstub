@@ -11,8 +11,13 @@ import multer from 'multer'
 import pinataSDK from '@pinata/sdk'
 import dotenv from 'dotenv'
 import { Readable } from 'stream'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-dotenv.config()
+// Ensure we load .env from THIS folder (nft_mint_server/.env)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+dotenv.config({ path: path.join(__dirname, '.env') })
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -36,7 +41,7 @@ console.log('Pinata JWT:', process.env.PINATA_JWT ? 'Loaded' : 'Not Loaded')
 const upload = multer({ storage: multer.memoryStorage() })
 
 // Pinata client setup.
-// By default this uses API key + secret from your .env.
+// By default this uses API key + secret from your .env, or JWT if provided.
 const pinata = process.env.PINATA_JWT
   ? new pinataSDK({ pinataJWTKey: process.env.PINATA_JWT })
   : new pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_API_SECRET)
@@ -132,9 +137,7 @@ app.post('/api/pin-image', upload.single('file'), async (req, res) => {
   }
 })
 
-const PORT = process.env.PORT || 3001;
-
 // Start the server
 app.listen(port, '0.0.0.0', () => {
   console.log(`Backend listening at http://localhost:${port}`);
-});
+})
