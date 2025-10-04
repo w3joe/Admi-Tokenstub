@@ -1,14 +1,1 @@
-{
-  "name": "Algorand Quick Start Dev",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "forwardPorts": [5173, 3001],
-  "portsAttributes": {
-    "5173": { "onAutoForward": "openBrowser" },
-    "3001": { "onAutoForward": "notify", "visibility": "public" }
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
-    }
-  }
-}
+
