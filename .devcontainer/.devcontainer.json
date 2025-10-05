@@ -2,18 +2,23 @@
   "name": "Algorand Quick Start Dev",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
   "features": {
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.12"
-    }
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.12" }
   },
+
+  "containerEnv": {
+    "NODE_ENV": "development",
+    "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "1"
+  },
+
   "forwardPorts": [4001, 4002, 8980, 5173, 3001],
   "portsAttributes": {
     "4001": { "label": "algod" },
     "4002": { "label": "kmd" },
     "8980": { "label": "indexer" },
-    "5173": { "onAutoForward": "openBrowser" },
-    "3001": { "onAutoForward": "notify", "visibility": "public" }
+    "5173": { "label": "Vite", "onAutoForward": "openBrowser", "visibility": "public" },
+    "3001": { "label": "Backend", "onAutoForward": "notify", "visibility": "public" }
   },
+
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,6 +27,7 @@
       ]
     }
   },
-  "onCreateCommand": "pipx install algokit || true",
-  "postCreateCommand": "npm ci || npm install && pip3 install py-algorand-sdk python-dotenv algokit-utils"
+
+  "onCreateCommand": "",
+  "postCreateCommand": "bash .devcontainer/setup.sh"
 }
