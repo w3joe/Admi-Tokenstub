@@ -26,11 +26,6 @@
     }
   },
 
-  "postCreateCommand": "bash -lc '.devcontainer/setup.sh'",
+  "postStartCommand": "bash .devcontainer/setup.sh"
 
-  // Start the dev server whenever the container starts (works even before the editor attaches)
-  "postStartCommand": "bash -lc 'echo POST_START_RAN && cd QuickStartTemplate/projects/QuickStartTemplate-frontend && npm run dev:fast'",
-
-  // Optional: also run it when the editor attaches (prints a breadcrumb so you can see it fired)
-  "postAttachCommand": "bash -lc 'echo POST_ATTACH_RAN'"
 }
