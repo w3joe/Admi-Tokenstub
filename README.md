@@ -94,7 +94,11 @@ This is the fastest way to get up and running!
    
    <img width="902" height="212" alt="image" src="https://github.com/user-attachments/assets/20178fa4-047b-4337-bd89-663c173a589d" />
 
-   
+## The Entire Process in a 2 min video:
+
+Check out this demonstration video of the entire process above if you prefer a visual walkthrough.
+You can find it on Google Drive here: https://drive.google.com/file/d/183j8jtXsYzDEmVw-FxGTVvwAhPBh5SRy/view?usp=sharing
+ 
 ## Pro Tip!
 GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours. 
 
