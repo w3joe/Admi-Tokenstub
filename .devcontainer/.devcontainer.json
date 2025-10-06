@@ -26,6 +26,6 @@
     }
   },
 
-  "postStartCommand": "bash .devcontainer/setup.sh"
+  "postStartCommand": "bash setup.sh"
 
 }
