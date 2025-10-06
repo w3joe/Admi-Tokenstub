@@ -36,50 +36,67 @@ This is the fastest way to get up and running!
 
    - Click the green "Code" button at the top right of your forked repo.
    - Select "Create codespace on main".
-   - Once your Codespace is fully loaded, you are ready to go!
-
-Make sure to wait for algokit to be installed automatically - it should only take a few mins max!
+   - Once your Codespace is fully loaded, you are ready to go.
+   - Run the set up command below in your terminal it should only take a few mins.
+  
+     ```bash
+     bash setup.sh
+     ```
 
 2. **While in Codespace:**
-   - Enter the workspace 
+   
+   - After you successfully ran the setup in your terminal then enter your workspace. Like seen in the picture below!
+     
    <img width="2794" height="1524" alt="image" src="https://github.com/user-attachments/assets/41f25490-1284-4998-b342-27f7a0ffb420" />
 
-3. **While in Workspace:**
+3. **While in Workspace: ⚠️ Important Environment Setup**
 
-   > 💡 **Note:** You can stay in the **root directory** of the project when running these commands.  
-   > (This is usually the folder automatically opened when entering the Workspace, so you don’t need to move elsewhere.)
-
-   - Run this command in your terminal:  
-     ```bash
-     npm run setup
-     ```
-   - Wait until all installations are completed.
-
-   - **IMPORTANT: Environment Setup**  
-     You need to create a new `.env` file in the following path:  
-
-     
-     `QuickStartTemplate-contracts/nft_mint_server`
+      **1. Network Settings (Frontend) 🌐**
    
+      This setup is required to get the webpage running and connected to the correct Algorand network.
 
-     Inside that folder, you will already find a file named `.env.template`.  
-     1. Copy all the contents of `.env.template`.  
-     2. Create a new file named `.env` in the same folder.  
-     3. Paste the copied content into your `.env`.  
-     4. Follow the instructions inside `.env.template` to generate your **Pinata API Key** and **Secret Key**, and replace the placeholders in your new `.env` file.
+      Path: `QuickStartTemplate/projects/QuickStartTemplate-frontend`
 
-   - **Final Step: Start the project**  
-     Once your `.env` file is ready, run the command below to start the project, then open the localhost URL shown in your terminal:
+      Steps:
+      - Locate the file `.env.template` in the path above.
+      - Create a new file named `.env` in the same folder as the path above.
+      - Copy all contents from `.env.template`
+      - Paste into your new .env file.
+
+      **2. NFT Minting (Pinata) 🖼️**
+   
+      This setup is required only if you plan to use the NFT Minting functionality.
+     
+      Path: `QuickStartTemplate-contracts/nft_mint_server`
+   
+      Steps:
+      -  Locate the file `.env.template` in the path above.
+      -  Copy all the contents of `.env.template`.  
+      -  Create a new file named `.env` in the same folder.  
+      -  Paste the copied content into your `.env`.  
+      -  Follow the instructions inside `.env.template` to generate your **Pinata API Key** and **Secret Key**, and replace the placeholders in your new `.env` file.
+
+## Final Step: Run the project!
+   > 💡 **Note:** You can stay in the **root directory** of the project when running the command. 
+   > (This is usually the folder automatically opened when entering the Workspace, so you don’t need to move elsewhere.)
+   
+   Once your `.env` files are ready (Expecially the Network one), run the command below to start the project:
 
      ```bash
      npm run dev
      ```
   
-     After running this command, you’ll see a pop-up in the bottom-right corner (screenshot below). 👉 Click `Set public` and your ready to go!
-     <img width="902" height="212" alt="image" src="https://github.com/user-attachments/assets/20178fa4-047b-4337-bd89-663c173a589d" />
+   After running the command, open the localhost URL shown in your terminal.
+
+   **Important: Set Visibility**
+   You’ll likely see a pop-up in the bottom-right corner. Click Set public to make the server accessible.
+   OR **manually go to the Ports section, right-click the 3001 port, and set its visibility to Public.**
+   
+   <img width="902" height="212" alt="image" src="https://github.com/user-attachments/assets/20178fa4-047b-4337-bd89-663c173a589d" />
 
    
-**Pro Tip:** GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours.  
+## Pro Tip!
+GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours. 
 
 To avoid losing your progress, be sure to **commit your changes regularly** — just like shown in the video demo below — so your updates are saved to your forked repository.
 
@@ -89,7 +106,7 @@ https://github.com/user-attachments/assets/dd452ea1-3070-4718-af34-bea978e208ab
 ## Project Structure Simplified
 
 **Front-end Files**
-- `projects/QuickStartTemplate-frontend/src/` — Frontend code files
+- `projects/QuickStartTemplate-frontend/src/` — Frontend Webpage files
 - `projects/QuickStartTemplate-frontend/src/Home.tsx` - Homepage (you can design this page)
 - `projects/QuickStartTemplate-frontend/src/App.tsx` — Main app layout and routing  
 - `projects/QuickStartTemplate-frontend/src/components/Transact.tsx` — Simple transfer ALGO and USDC logic 
