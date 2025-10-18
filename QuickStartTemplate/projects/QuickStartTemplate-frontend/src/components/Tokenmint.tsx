@@ -1,226 +1,134 @@
+
 // Tokenmint.tsx
 // Create a standard fungible token (ASA) on Algorand TestNet.
-// Users can set asset name, unit name, total supply, and decimals.
-
-import { AlgorandClient } from '@algorandfoundation/algokit-utils'
-import { useWallet } from '@txnlab/use-wallet-react'
-import { useSnackbar } from 'notistack'
-import { useMemo, useState } from 'react'
-import { AiOutlineLoading3Quarters, AiOutlineInfoCircle } from 'react-icons/ai'
-import { BsCoin } from 'react-icons/bs'
-import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
+import { AlgorandClient } from '@algorandfoundation/algokit-utils';
+import { useWallet } from '@txnlab/use-wallet-react';
+import { useSnackbar } from 'notistack';
+import { useMemo, useState, useRef } from 'react';
+import { AiOutlineLoading3Quarters, AiOutlineInfoCircle } from 'react-icons/ai';
+import { BsCoin } from 'react-icons/bs';
+import { FaPlus, FaTrash } from 'react-icons/fa';
+import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs';
 
 interface TokenMintProps {
-  openModal: boolean
-  setModalState: (value: boolean) => void
+  openModal: boolean;
+  setModalState: (value: boolean) => void;
 }
+
+const defaultTokenRow = () => ({
+  assetName: 'MasterPass Token',
+  unitName: 'MPT',
+  total: '1000',
+  decimals: '0',
+  status: '' as '' | 'pending' | 'success' | 'error',
+  assetId: undefined as number | undefined,
+  error: '' as string,
+});
+
+type TicketMintResult = { status: 'pending' | 'success' | 'error'; assetId?: number; error?: string };
 
 const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
   const LORA = 'https://lora.algokit.io/testnet';
+  const [ticketCount, setTicketCount] = useState<string>('1');
+  const [results, setResults] = useState<TicketMintResult[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { transactionSigner, activeAddress } = useWallet();
+  const { enqueueSnackbar } = useSnackbar();
+  const algodConfig = getAlgodConfigFromViteEnvironment();
+  const algorand = useMemo(() => AlgorandClient.fromConfig({ algodConfig }), [algodConfig]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // 👇 Default placeholder values (safe customization points for learners)
-  const [assetName, setAssetName] = useState<string>('MasterPass Token') // token name
-  const [unitName, setUnitName] = useState<string>('MPT')               // short ticker
-  const [total, setTotal] = useState<string>('1000')                    // human-readable total
-  const [decimals, setDecimals] = useState<string>('0')                 // 0 = whole tokens only
-
-  const [loading, setLoading] = useState<boolean>(false)
-
-  // Wallet + notifications
-  const { transactionSigner, activeAddress } = useWallet()
-  const { enqueueSnackbar } = useSnackbar()
-
-  // Algorand client (TestNet from Vite env)
-  const algodConfig = getAlgodConfigFromViteEnvironment()
-  const algorand = useMemo(() => AlgorandClient.fromConfig({ algodConfig }), [algodConfig])
-
-  // ------------------------------
-  // Handle Token Creation
-  // ------------------------------
-  const handleMintToken = async () => {
+  const handleMintTickets = async () => {
     if (!transactionSigner || !activeAddress) {
-      enqueueSnackbar('Please connect your wallet first.', { variant: 'warning' })
-      return
+      enqueueSnackbar('Please connect your wallet first.', { variant: 'warning' });
+      return;
     }
-
-    // Basic validation checks
-    if (!assetName || !unitName) {
-      enqueueSnackbar('Please enter an asset name and unit name.', { variant: 'warning' })
-      return
+    if (!/^[0-9]+$/.test(ticketCount) || Number(ticketCount) < 1) {
+      enqueueSnackbar('Please enter a positive number of tickets.', { variant: 'warning' });
+      return;
     }
-    if (!/^\d+$/.test(total)) {
-      enqueueSnackbar('Total supply must be a whole number.', { variant: 'warning' })
-      return
+    const count = Number(ticketCount);
+    setLoading(true);
+    setResults([]);
+    let newResults: TicketMintResult[] = [];
+    for (let i = 1; i <= count; ++i) {
+      newResults.push({ status: 'pending' });
+      setResults([...newResults]);
+      try {
+        enqueueSnackbar(`Minting Ticket (${i})...`, { variant: 'info' });
+        const createResult = await algorand.send.assetCreate({
+          sender: activeAddress,
+          signer: transactionSigner,
+          total: 1n,
+          decimals: 0,
+          assetName: `Ticket (${i})`,
+          unitName: 'TIX',
+          defaultFrozen: false,
+        });
+        newResults[i-1] = { status: 'success', assetId: Number(createResult.assetId) };
+        enqueueSnackbar(`Ticket (${i}) minted! Asset ID: ${createResult.assetId}`, { variant: 'success' });
+      } catch (e: any) {
+        newResults[i-1] = { status: 'error', error: e?.message ? String(e.message) : 'Error' };
+        enqueueSnackbar(`Ticket (${i}) failed`, { variant: 'error' });
+      }
+      setResults([...newResults]);
     }
-    if (!/^\d+$/.test(decimals)) {
-      enqueueSnackbar('Decimals must be a whole number.', { variant: 'warning' })
-      return
-    }
+    setLoading(false);
+  };
 
-    try {
-      setLoading(true)
-      enqueueSnackbar('Creating token...', { variant: 'info' })
-
-      const totalBig = BigInt(total)
-      const decimalsBig = BigInt(decimals)
-
-      // On-chain total supply = total × 10^decimals
-      const onChainTotal = totalBig * 10n ** decimalsBig
-
-      // 👇 Learners can customize all of these ASA parameters
-      const createResult = await algorand.send.assetCreate({
-        sender: activeAddress,
-        signer: transactionSigner,
-        total: onChainTotal,
-        decimals: Number(decimalsBig),
-        assetName,   // <— customize token name
-        unitName,    // <— customize unit/ticker
-        defaultFrozen: false,
-      })
-
-      const id = createResult;
-
-      enqueueSnackbar(`✅ Success! Asset ID: ${id.assetId}`, {
-        variant: 'success',
-        action: () =>
-          id ? (
-            <a
-              href={`${LORA}/asset/${id.assetId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'underline', marginLeft: 8 }}
-            >
-              View on Lora ↗
-            </a>
-          ) : null,
-      });
-
-      // Reset back to defaults after successful mint
-      setAssetName('MasterPass Token')
-      setUnitName('MPT')
-      setTotal('1000')
-      setDecimals('0')
-    } catch (error) {
-      console.error(error)
-      enqueueSnackbar('Failed to create token', { variant: 'error' })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // ------------------------------
-  // Modal UI
-  // ------------------------------
   return (
     <dialog
       id="token_modal"
       className={`modal modal-bottom sm:modal-middle backdrop-blur-sm ${openModal ? 'modal-open' : ''}`}
     >
-      <div className="modal-box bg-neutral-800 text-gray-100 rounded-2xl shadow-xl border border-neutral-700 p-6">
+      <div className="modal-box bg-neutral-800 text-gray-100 rounded-2xl shadow-xl border border-neutral-700 p-6 min-w-[360px]">
         <h3 className="flex items-center gap-3 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500 mb-2">
-          <BsCoin className="text-3xl" />
-          Create a MasterPass Token
+          <BsCoin size={32} />
+          Mint Tickets
         </h3>
         <p className="text-gray-400 text-sm mb-6">
-          This creates a standard fungible token (ASA) on the Algorand TestNet.
+          Mint Ticket tokens in bulk. Each ticket gets an assetName of 'Ticket (i)', unitName 'TIX', total 1, decimals 0.
         </p>
-
-        {/* Input fields for customization */}
-        <div className="space-y-4">
-          {/* Asset Name */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-gray-400">Asset Name</span>
-            </label>
-            <input
-              type="text"
-              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-              placeholder="e.g., MasterPass Token"
-              value={assetName}
-              onChange={(e) => setAssetName(e.target.value)}
-            />
-          </div>
-
-          {/* Unit Name */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-gray-400">Unit Name</span>
-            </label>
-            <input
-              type="text"
-              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-              placeholder="e.g., MPT"
-              value={unitName}
-              onChange={(e) => setUnitName(e.target.value)}
-            />
-          </div>
-
-          {/* Total Supply */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-gray-400">Total Supply</span>
-            </label>
-            <input
-              type="number"
-              min={1}
-              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-              placeholder="e.g., 1000"
-              value={total}
-              onChange={(e) => setTotal(e.target.value)}
-            />
-          </div>
-
-          {/* Decimals */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text text-gray-400">Decimals</span>
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={19}
-              className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-              placeholder="0 for whole tokens"
-              value={decimals}
-              onChange={(e) => setDecimals(e.target.value)}
-            />
-            <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
-              <AiOutlineInfoCircle />
-              <p>On-chain total = <code>total × 10^decimals</code>.</p>
-            </div>
-          </div>
+        <div className="space-y-3">
+          <input
+            ref={inputRef}
+            type="number"
+            min={1}
+            className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+            placeholder="How many tickets?"
+            value={ticketCount}
+            onChange={e => setTicketCount(e.target.value)}
+            disabled={loading}
+          />
         </div>
-
-        {/* Action buttons */}
-        <div className="modal-action mt-6 flex flex-col-reverse sm:flex-row-reverse gap-3">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 mt-4">
           <button
             type="button"
-            className={`btn w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white rounded-xl border-none font-semibold ${
-              assetName && unitName && total ? '' : 'btn-disabled opacity-50 cursor-not-allowed'
-            }`}
-            onClick={handleMintToken}
-            disabled={loading || !assetName || !unitName || !total}
+            className={`btn bg-green-500 hover:bg-green-600 text-white w-full sm:w-auto rounded-xl border-none font-semibold ${loading ? 'btn-disabled opacity-50 cursor-not-allowed' : ''}`}
+            onClick={handleMintTickets}
+            disabled={loading}
           >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <AiOutlineLoading3Quarters className="animate-spin" />
-                Creating...
-              </span>
-            ) : (
-              'Create Token'
-            )}
+            {loading ? <span className="flex items-center gap-2"><AiOutlineLoading3Quarters size={20}/>Minting...</span> : 'Mint Tickets'}
           </button>
           <button
             type="button"
             className="btn w-full sm:w-auto bg-neutral-700 hover:bg-neutral-600 border-none text-gray-300 rounded-xl"
             onClick={() => setModalState(false)}
-          >
-            Close
-          </button>
+            disabled={loading}
+          >Close</button>
+        </div>
+        <div className="mt-4 space-y-1 text-xs">
+          {results.map((r, i) => r.status === 'success' ? (
+            <p key={i} className="text-green-400">#{i+1} Ticket minted! Asset ID: {r.assetId} <a className="underline ml-2" href={`${LORA}/asset/${r.assetId}`} target="_blank" rel="noopener noreferrer">View</a></p>
+          ) : r.status === 'error' ? (
+            <p key={i} className="text-red-400">#{i+1} Failed: {r.error}</p>
+          ) : r.status === 'pending' ? (
+            <p key={i} className="text-cyan-400">#{i+1} Minting...</p>
+          ) : null)}
         </div>
       </div>
     </dialog>
-  )
-}
+  );
+};
 
-export default Tokenmint
+export default Tokenmint;
