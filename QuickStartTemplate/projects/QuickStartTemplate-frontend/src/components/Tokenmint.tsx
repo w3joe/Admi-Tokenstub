@@ -64,17 +64,22 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
           assetName: `Ticket (${i})`,
           unitName: 'TIX',
           defaultFrozen: false,
+          manager: activeAddress,
+          reserve: activeAddress,
+          freeze: activeAddress,
+          clawback: activeAddress,
         });
         newResults[i-1] = { status: 'success', assetId: Number(createResult.assetId) };
         enqueueSnackbar(`Ticket (${i}) minted! Asset ID: ${createResult.assetId}`, { variant: 'success' });
-      } catch (e: any) {
-        newResults[i-1] = { status: 'error', error: e?.message ? String(e.message) : 'Error' };
+      } catch (e) {
+        const errMsg = (e && typeof e === 'object' && 'message' in e) ? String((e as any).message) : 'Error';
+        newResults[i - 1] = { status: 'error', error: errMsg };
         enqueueSnackbar(`Ticket (${i}) failed`, { variant: 'error' });
       }
       setResults([...newResults]);
     }
     setLoading(false);
-  };
+  }
 
   return (
     <dialog
@@ -97,7 +102,7 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
             className="input input-bordered w-full bg-neutral-700 text-gray-100 border-neutral-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
             placeholder="How many tickets?"
             value={ticketCount}
-            onChange={e => setTicketCount(e.target.value)}
+            onChange={(e) => setTicketCount(e.target.value)}
             disabled={loading}
           />
         </div>
@@ -108,23 +113,48 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
             onClick={handleMintTickets}
             disabled={loading}
           >
-            {loading ? <span className="flex items-center gap-2"><AiOutlineLoading3Quarters size={20}/>Minting...</span> : 'Mint Tickets'}
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <AiOutlineLoading3Quarters size={20} />
+                Minting...
+              </span>
+            ) : (
+              'Mint Tickets'
+            )}
           </button>
           <button
             type="button"
             className="btn w-full sm:w-auto bg-neutral-700 hover:bg-neutral-600 border-none text-gray-300 rounded-xl"
             onClick={() => setModalState(false)}
             disabled={loading}
-          >Close</button>
+          >
+            Close
+          </button>
         </div>
         <div className="mt-4 space-y-1 text-xs">
-          {results.map((r, i) => r.status === 'success' ? (
-            <p key={i} className="text-green-400">#{i+1} Ticket minted! Asset ID: {r.assetId} <a className="underline ml-2" href={`${LORA}/asset/${r.assetId}`} target="_blank" rel="noopener noreferrer">View</a></p>
-          ) : r.status === 'error' ? (
-            <p key={i} className="text-red-400">#{i+1} Failed: {r.error}</p>
-          ) : r.status === 'pending' ? (
-            <p key={i} className="text-cyan-400">#{i+1} Minting...</p>
-          ) : null)}
+          {results.map((r, i) =>
+            r.status === 'success' ? (
+              <p key={i} className="text-green-400">
+                #{i + 1} Ticket minted! Asset ID: {r.assetId}{' '}
+                <a
+                  className="underline ml-2"
+                  href={`${LORA}/asset/${r.assetId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View
+                </a>
+              </p>
+            ) : r.status === 'error' ? (
+              <p key={i} className="text-red-400">
+                #{i + 1} Failed: {r.error}
+              </p>
+            ) : r.status === 'pending' ? (
+              <p key={i} className="text-cyan-400">
+                #{i + 1} Minting...
+              </p>
+            ) : null
+          )}
         </div>
       </div>
     </dialog>
