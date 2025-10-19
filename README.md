@@ -31,6 +31,18 @@ Tokenstub leverages the Algorand blockchain to create fungible ticket tokens tha
 - **One-per-Wallet Limits**: Optional restrictions to ensure fair distribution
 - **Transparent Pricing**: All ticket prices visible on-chain
 
+
+
+### Ticket Buyer
+https://github.com/user-attachments/assets/45e4ed7b-7a33-4145-830b-3c48a8a73e7e
+
+
+
+### Event Organiser
+Uploading Untitled.mov…
+
+
+
 ### Secure Validation
 
 - **On-Chain Verification**: Ticket masters validate tickets directly on the blockchain
