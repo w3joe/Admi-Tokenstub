@@ -1,132 +1,189 @@
-# Algorand-dApp-Quick-Start-Template-TypeScript
+# Tokenstub
 
-This is a full-stack starter template for quickly building and testing Web3 ideas on Algorand. It includes:
+A blockchain-based ticketing platform built on Algorand that eliminates scalping and creates a transparent, secure event ticketing ecosystem.
 
-- Wallet connection
-- Send ALGO or USDC payments
-- NFT minting (IPFS metadata via Pinata)
-- Asset (ASA) creation
-- Smart contract interaction demo
+## The Problem
 
-Use this template to kickstart your project, prototype ideas, and showcase a working proof-of-concept.
+The ticketing industry faces critical challenges that hurt both event organizers and genuine fans:
 
-## 🌟 How To Get Started Instructions
+- **Rampant Scalping**: Tickets are bought in bulk by bots and resold at inflated prices, pricing out genuine fans
+- **Counterfeit Tickets**: Fake tickets lead to disappointed customers and revenue loss for organizers
+- **Lack of Transparency**: Secondary market transactions occur in opaque systems with no control or visibility
+- **Lost Revenue**: Event organizers see no benefit from secondary market sales despite creating the original value
 
-### **Fork the Repo:**
+## Our Solution
 
-To create your own copy of this repository:
+Tokenstub leverages the Algorand blockchain to create fungible ticket tokens that can be validated, tracked, and controlled throughout their lifecycle. Our platform prevents scalping through smart contract-enforced transfer locks while maintaining ticket authenticity and transparency.
 
-a. **Go to the GitHub Repository:**
-   - Navigate to the main page which is the current one your on.
+### How It Works
 
-b. **Click the "Fork" Button:**
-   - In the top-right corner of the page, click the **Fork** button. This will create a copy of the repository under your GitHub account. Feel free to hit the ⭐️ aswell so you can find the Algorand-dApp-Quick-Start-Template-Typescript repo easily!
+1. **Ticket Creation**: Event organizers mint fungible ticket tokens on Algorand representing admission rights
+2. **Primary Sale**: Fans purchase tickets directly using Algo cryptocurrency
+3. **Transfer Lock**: Smart contracts prevent ticket transfers until the event day, eliminating speculative scalping
+4. **Validation**: Authorized ticket masters validate tickets on-chain at the venue entrance
+5. **Transparent Records**: All transactions are recorded immutably on the blockchain
 
-c. **Wait for the Forking Process to Complete:**
-   - GitHub will take a few moments to create the fork. Once complete, you’ll be redirected to your newly created fork.
+## Key Features
 
+### Anti-Scalping Protection
 
-https://github.com/user-attachments/assets/92e746e1-3143-4769-8a5a-1339e4bd7a14
+- **Transfer Lock Mechanism**: Tickets cannot be exchanged or resold until event day, preventing bots from profiting off artificial scarcity
+- **One-per-Wallet Limits**: Optional restrictions to ensure fair distribution
+- **Transparent Pricing**: All ticket prices visible on-chain
 
+### Secure Validation
 
-## 🚀 Start with Codespaces
-This is the fastest way to get up and running!
+- **On-Chain Verification**: Ticket masters validate tickets directly on the blockchain
+- **Real-Time Status**: Instant confirmation of ticket authenticity and usage
+- **No Counterfeits**: Blockchain immutability ensures only genuine tickets exist
 
-1. **Create a Codespace:**
+### Built on Algorand
 
-   - Click the green "Code" button at the top right of your forked repo.
-   - Select "Create codespace on main".
-   - Once your Codespace is fully loaded, you are ready to go.
-   - Run the set up command below in your terminal it should only take a few mins.
-  
-     ```bash
-     bash setup.sh
-     ```
+- **Low Transaction Fees**: Minimal costs for ticket purchases and transfers
+- **Fast Finality**: Instant transaction confirmation
+- **Eco-Friendly**: Carbon-neutral blockchain with proof-of-stake consensus
+- **Scalability**: Handles high-volume ticket sales efficiently
 
-2. **While in Codespace:**
-   
-   - After you successfully ran the setup in your terminal then enter your workspace. Like seen in the picture below!
-     
-   <img width="2794" height="1524" alt="image" src="https://github.com/user-attachments/assets/41f25490-1284-4998-b342-27f7a0ffb420" />
+### Event Organizer Benefits
 
-3. **While in Workspace: ⚠️ Important Environment Setup**
+- **Revenue Protection**: Eliminate losses from counterfeit tickets
+- **Market Control**: Set rules for ticket distribution and transfers
+- **Analytics Dashboard**: Track sales, attendance, and market activity
+- **Direct Fan Relationships**: Connect with ticket holders through wallet addresses
 
-      **1. Network Settings (Frontend) 🌐**
-   
-      This setup is required to get the webpage running and connected to the correct Algorand network.
+## Technology Stack
 
-      Path: `QuickStartTemplate/projects/QuickStartTemplate-frontend`
+- **Blockchain**: Algorand
+- **Smart Contracts**: Algorand Standard Assets (ASA) for fungible tickets
+- **Currency**: Algo (ALGO)
+- **Validation**: On-chain verification system
+- **Frontend**: [To be determined based on implementation]
 
-      Steps:
-      - Locate the file `.env.template` in the path above.
-      - Create a new file named `.env` in the same folder as the path above.
-      - Copy all contents from `.env.template`
-      - Paste into your new .env file.
+## Use Cases
 
-      **2. NFT Minting (Pinata) 🖼️**
-   
-      This setup is required only if you plan to use the NFT Minting functionality.
-     
-      Path: `QuickStartTemplate-contracts/nft_mint_server`
-   
-      Steps:
-      -  Locate the file `.env.template` in the path above.
-      -  Copy all the contents of `.env.template`.  
-      -  Create a new file named `.env` in the same folder.  
-      -  Paste the copied content into your `.env`.  
-      -  Follow the instructions inside `.env.template` to generate your **Pinata API Key** and **Secret Key**, and replace the placeholders in your new `.env` file.
+- **Concerts & Festivals**: Prevent scalping for high-demand music events
+- **Sports Events**: Ensure fair access to championship games and tournaments
+- **Theater & Arts**: Protect small venues from predatory resellers
+- **Conferences**: Manage professional event access with verifiable credentials
+- **Community Events**: Enable local organizers to control their ticketing ecosystem
 
-## Final Step: Run the project!
-   > 💡 **Note:** You can stay in the **root directory** of the project when running the command. 
-   > (This is usually the folder automatically opened when entering the Workspace, so you don’t need to move elsewhere.)
-   
-   Once your `.env` files are ready (Expecially the Network one), run the command below to start the project:
+## Getting Started
 
-     ```bash
-     npm run dev
-     ```
-  
-   After running the command, open the localhost URL shown in your terminal.
+### For Event Organizers
 
-   **Important: Set Visibility**
-   You’ll likely see a pop-up in the bottom-right corner. Click Set public to make the server accessible.
-   OR **manually go to the Ports section, right-click the 3001 port, and set its visibility to Public.**
-   
-   <img width="902" height="212" alt="image" src="https://github.com/user-attachments/assets/20178fa4-047b-4337-bd89-663c173a589d" />
+1. Create an account and connect your Algorand wallet
+2. Set up your event with ticket parameters (price, quantity, transfer rules)
+3. Mint your ticket tokens on Algorand
+4. Share the sale link with your audience
+5. Validate tickets on event day using our mobile app
 
-## The Entire Process in a 2 min video:
+### For Ticket Holders
 
-Check out this demonstration video of the entire process above if you prefer a visual walkthrough.
-You can find it on Google Drive here: https://drive.google.com/file/d/183j8jtXsYzDEmVw-FxGTVvwAhPBh5SRy/view?usp=sharing
- 
-## Pro Tip!
-GitHub Codespaces is included with free accounts but comes with a monthly limit of 60 hours. 
+1. Connect your Algorand wallet
+2. Browse available events
+3. Purchase tickets with ALGO
+4. Store tickets securely in your wallet
+5. Present for validation at the venue
 
-To avoid losing your progress, be sure to **commit your changes regularly** — just like shown in the video demo below — so your updates are saved to your forked repository.
+### For Ticket Masters
 
-https://github.com/user-attachments/assets/dd452ea1-3070-4718-af34-bea978e208ab
+1. Receive authorized validator credentials from event organizer
+2. Access the validation interface on event day
+3. Scan or verify ticket IDs on-chain
+4. Mark tickets as validated to prevent reuse
 
+## Roadmap
 
-## Project Structure Simplified
+**Phase 1: MVP Launch**
 
-**Front-end Files**
-- `projects/QuickStartTemplate-frontend/src/` — Frontend Webpage files
-- `projects/QuickStartTemplate-frontend/src/Home.tsx` - Homepage (you can design this page)
-- `projects/QuickStartTemplate-frontend/src/App.tsx` — Main app layout and routing  
-- `projects/QuickStartTemplate-frontend/src/components/Transact.tsx` — Simple transfer ALGO and USDC logic 
-- `projects/QuickStartTemplate-frontend/src/components/NFTmint.tsx` — Simple NFT minting interface  
-- `projects/QuickStartTemplate-frontend/src/components/Tokenmint.tsx` — Simple token (ASA) minting interface  
-- `projects/QuickStartTemplate-frontend/src/components/AppCalls.tsx` — Smart contract interaction demo
+- Core ticketing functionality
+- Transfer lock implementation
+- Basic validation system
 
-**Back-end Files**
-- `projects/QuickStartTemplate-contracts/smart_contracts/hello_world/contract.algo.ts` — Example TypeScript smart contract (Default AlgoKit Hello World)  
-- `projects/QuickStartTemplate-contracts/nft_mint_server/` — Backend server for NFT minting (contains `.env.template` and where you create your own `.env`)  
+**Phase 2: Enhanced Features**
 
+- Mobile validation app
+- Event organizer dashboard
+- Secondary market (post-event only)
 
-## Reference Guide
+**Phase 3: Ecosystem Growth**
 
-Need more help? See the Algorand-dApp-Quick-Start-Template Reference Guide for step-by-step instructions, AI prompts, and troubleshooting tips:
+- Integration with major event platforms
+- NFT collectibles for memorable events
+- Loyalty rewards program
 
-[View the guide](https://docs.google.com/document/d/1f_ysbtFOLKM_Tjvey7VCcGYsAzOmyEVmsdC5si936wc/edit?usp=sharing)
+**Phase 4: Scale**
 
+- Multi-chain support
+- Enterprise partnerships
+- Global expansion
 
+## Why Algorand?
+
+We chose Algorand for several compelling reasons:
+
+- **Speed**: Block finality in under 3 seconds enables real-time ticketing
+- **Cost**: Transaction fees under $0.001 keep ticketing affordable
+- **Sustainability**: Carbon-negative blockchain aligns with event industry values
+- **Simplicity**: Built-in ASA standard makes fungible tickets straightforward to implement
+- **Security**: Pure proof-of-stake ensures network integrity
+
+## Contributing
+
+We welcome contributions from the community! Please see our contributing guidelines for more information on how to get involved.
+
+## License
+
+[License Type] - See LICENSE file for details
+
+## Contact
+
+- **Website**: [tokenstub.io]
+- **Email**: hello@tokenstub.io
+- **Twitter**: @tokenstub
+- **Discord**: [Community Link]
+
+---
+
+_Built with ♥ for fans, by fans. Powered by Algorand._
+
+### Initial setup
+
+1. Clone this repository to your local machine.
+2. Ensure [Docker](https://www.docker.com/) is installed and operational. Then, install `AlgoKit` following this [guide](https://github.com/algorandfoundation/algokit-cli#install).
+3. Run `algokit project bootstrap all` in the project directory. This command sets up your environment by installing necessary dependencies, setting up a Python virtual environment, and preparing your `.env` file.
+4. In the case of a smart contract project, execute `algokit generate env-file -a target_network localnet` from the `Algorand-contracts` directory to create a `.env.localnet` file with default configuration for `localnet`.
+5. To build your project, execute `algokit project run build`. This compiles your project and prepares it for running.
+6. For project-specific instructions, refer to the READMEs of the child projects:
+   - Smart Contracts: [Algorand-contracts](projects/Algorand-contracts/README.md)
+   - Frontend Application: [Algorand-frontend](projects/Algorand-frontend/README.md)
+
+> This project is structured as a monorepo, refer to the [documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/features/project/run.md) to learn more about custom command orchestration via `algokit project run`.
+
+### Subsequently
+
+1. If you update to the latest source code and there are new dependencies, you will need to run `algokit project bootstrap all` again.
+2. Follow step 3 above.
+
+## Tools
+
+This project makes use of Python and React to build Algorand smart contracts and to provide a base project configuration to develop frontends for your Algorand dApps and interactions with smart contracts. The following tools are in use:
+
+- Algorand, AlgoKit, and AlgoKit Utils
+- Python dependencies including Poetry, Black, Ruff or Flake8, mypy, pytest, and pip-audit
+- React and related dependencies including AlgoKit Utils, Tailwind CSS, daisyUI, use-wallet, npm, jest, playwright, Prettier, ESLint, and Github Actions workflows for build validation
+
+### VS Code
+
+It has also been configured to have a productive dev experience out of the box in [VS Code](https://code.visualstudio.com/), see the [backend .vscode](./backend/.vscode) and [frontend .vscode](./frontend/.vscode) folders for more details.
+
+## Integrating with smart contracts and application clients
+
+Refer to the [Algorand-contracts](projects/Algorand-contracts/README.md) folder for overview of working with smart contracts, [projects/Algorand-frontend](projects/Algorand-frontend/README.md) for overview of the React project and the [projects/Algorand-frontend/contracts](projects/Algorand-frontend/src/contracts/README.md) folder for README on adding new smart contracts from backend as application clients on your frontend. The templates provided in these folders will help you get started.
+When you compile and generate smart contract artifacts, your frontend component will automatically generate typescript application clients from smart contract artifacts and move them to `frontend/src/contracts` folder, see [`generate:app-clients` in package.json](projects/Algorand-frontend/package.json). Afterwards, you are free to import and use them in your frontend application.
+
+The frontend starter also provides an example of interactions with your AlgorandClient in [`AppCalls.tsx`](projects/Algorand-frontend/src/components/AppCalls.tsx) component by default.
+
+## Next Steps
+
+You can take this project and customize it to build your own decentralized applications on Algorand. Make sure to understand how to use AlgoKit and how to write smart contracts for Algorand before you start.
