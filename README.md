@@ -2,6 +2,9 @@
 
 A blockchain-based ticketing platform built on Algorand that eliminates scalping and creates a transparent, secure event ticketing ecosystem.
 
+<img width="1200" height="950" alt="image" src="https://github.com/user-attachments/assets/0703f3d2-07d5-410b-9e47-d25a91cf9ac9" />
+
+
 ## The Problem
 
 The ticketing industry faces critical challenges that hurt both event organizers and genuine fans:
