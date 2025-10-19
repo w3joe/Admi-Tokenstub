@@ -1,0 +1,461 @@
+{
+  "version": 3,
+  "sources": [
+    "/Users/shashankdurgad/Documents/GitHub/Admi-Tokenstub/QuickStartTemplate/projects/QuickStartTemplate-contracts/smart_contracts/one_asa_transfer/contract.algo.ts"
+  ],
+  "mappings": ";;;;;;;;;;;;;AAKA;;AAAA;;;AAAA;;;;;;;;;;;;AAAA;;;AAAA;;;;;;AAAA;;AAYE;;AAAA;AAAA;AAAA;;AAAA;AAZF;;;AAAA;AAAA;;;AAAA;;;AAYE;;;AAAA;;AAPA;;AAAA;AAAA;AAAA;;AAAA;AAAA;;;AAAA;;AALF;;AAAA;;;AAAA;;AAAA;AAAA;AAAA;;AAEoC;AAKT;;AAAvB;;AAKF;;;AAEa;;AAZqB;AAAA;AAAA;AAAA;AAYzB;AAAP;AAGA;;;;;AAGsB;;;;;;;AAHtB;;;;AAAA;;;AAAA;",
+  "op_pc_offset": 0,
+  "pc_events": {
+    "1": {
+      "subroutine": "@algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram",
+      "params": {},
+      "block": "main",
+      "stack_in": [],
+      "op": "intcblock 1 0"
+    },
+    "5": {
+      "op": "bytecblock \"owner\""
+    },
+    "13": {
+      "op": "txn NumAppArgs",
+      "defined_out": [
+        "tmp%0#1"
+      ],
+      "stack_out": [
+        "tmp%0#1"
+      ]
+    },
+    "15": {
+      "op": "bz main_bare_routing@7",
+      "stack_out": []
+    },
+    "18": {
+      "op": "pushbytess 0x4c5c61ba 0x44f54cbc // method \"create()void\", method \"transfer(uint64,byte[])void\"",
+      "defined_out": [
+        "Method(create()void)",
+        "Method(transfer(uint64,byte[])void)"
+      ],
+      "stack_out": [
+        "Method(create()void)",
+        "Method(transfer(uint64,byte[])void)"
+      ]
+    },
+    "30": {
+      "op": "txna ApplicationArgs 0",
+      "defined_out": [
+        "Method(create()void)",
+        "Method(transfer(uint64,byte[])void)",
+        "tmp%2#0"
+      ],
+      "stack_out": [
+        "Method(create()void)",
+        "Method(transfer(uint64,byte[])void)",
+        "tmp%2#0"
+      ]
+    },
+    "33": {
+      "op": "match main_create_route@3 main_transfer_route@4",
+      "stack_out": []
+    },
+    "39": {
+      "block": "main_after_if_else@11",
+      "stack_in": [],
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "40": {
+      "op": "return",
+      "stack_out": []
+    },
+    "41": {
+      "block": "main_transfer_route@4",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%7#0"
+      ],
+      "stack_out": [
+        "tmp%7#0"
+      ]
+    },
+    "43": {
+      "op": "!",
+      "defined_out": [
+        "tmp%8#0"
+      ],
+      "stack_out": [
+        "tmp%8#0"
+      ]
+    },
+    "44": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "45": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%9#0"
+      ],
+      "stack_out": [
+        "tmp%9#0"
+      ]
+    },
+    "47": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "48": {
+      "op": "txna ApplicationArgs 1",
+      "defined_out": [
+        "reinterpret_bytes[8]%0#0"
+      ],
+      "stack_out": [
+        "reinterpret_bytes[8]%0#0"
+      ]
+    },
+    "51": {
+      "op": "btoi",
+      "defined_out": [
+        "tmp%11#0"
+      ],
+      "stack_out": [
+        "tmp%11#0"
+      ]
+    },
+    "52": {
+      "op": "txna ApplicationArgs 2",
+      "defined_out": [
+        "tmp%11#0",
+        "tmp%12#0"
+      ],
+      "stack_out": [
+        "tmp%11#0",
+        "tmp%12#0"
+      ]
+    },
+    "55": {
+      "op": "extract 2 0",
+      "defined_out": [
+        "tmp%11#0",
+        "tmp%13#0"
+      ],
+      "stack_out": [
+        "tmp%11#0",
+        "tmp%13#0"
+      ]
+    },
+    "58": {
+      "callsub": "smart_contracts/one_asa_transfer/contract.algo.ts::OneAsaTransfer.transfer",
+      "op": "callsub transfer",
+      "stack_out": []
+    },
+    "61": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "62": {
+      "op": "return",
+      "stack_out": []
+    },
+    "63": {
+      "block": "main_create_route@3",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%3#0"
+      ],
+      "stack_out": [
+        "tmp%3#0"
+      ]
+    },
+    "65": {
+      "op": "!",
+      "defined_out": [
+        "tmp%4#0"
+      ],
+      "stack_out": [
+        "tmp%4#0"
+      ]
+    },
+    "66": {
+      "error": "OnCompletion is not NoOp",
+      "op": "assert // OnCompletion is not NoOp",
+      "stack_out": []
+    },
+    "67": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%5#0"
+      ],
+      "stack_out": [
+        "tmp%5#0"
+      ]
+    },
+    "69": {
+      "error": "can only call when not creating",
+      "op": "assert // can only call when not creating",
+      "stack_out": []
+    },
+    "70": {
+      "callsub": "smart_contracts/one_asa_transfer/contract.algo.ts::OneAsaTransfer.create",
+      "op": "callsub create"
+    },
+    "73": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "74": {
+      "op": "return",
+      "stack_out": []
+    },
+    "75": {
+      "block": "main_bare_routing@7",
+      "stack_in": [],
+      "op": "txn OnCompletion",
+      "defined_out": [
+        "tmp%14#0"
+      ],
+      "stack_out": [
+        "tmp%14#0"
+      ]
+    },
+    "77": {
+      "op": "bnz main_after_if_else@11",
+      "stack_out": []
+    },
+    "80": {
+      "op": "txn ApplicationID",
+      "defined_out": [
+        "tmp%15#0"
+      ],
+      "stack_out": [
+        "tmp%15#0"
+      ]
+    },
+    "82": {
+      "op": "!",
+      "defined_out": [
+        "tmp%16#0"
+      ],
+      "stack_out": [
+        "tmp%16#0"
+      ]
+    },
+    "83": {
+      "error": "can only call when creating",
+      "op": "assert // can only call when creating",
+      "stack_out": []
+    },
+    "84": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "85": {
+      "op": "return",
+      "stack_out": []
+    },
+    "86": {
+      "subroutine": "smart_contracts/one_asa_transfer/contract.algo.ts::OneAsaTransfer.create",
+      "params": {},
+      "block": "create",
+      "stack_in": [],
+      "op": "bytec_0 // \"owner\"",
+      "defined_out": [
+        "\"owner\""
+      ],
+      "stack_out": [
+        "\"owner\""
+      ]
+    },
+    "87": {
+      "op": "txn Sender",
+      "defined_out": [
+        "\"owner\"",
+        "new_state_value%0#0"
+      ],
+      "stack_out": [
+        "\"owner\"",
+        "new_state_value%0#0"
+      ]
+    },
+    "89": {
+      "op": "app_global_put",
+      "stack_out": []
+    },
+    "90": {
+      "retsub": true,
+      "op": "retsub"
+    },
+    "91": {
+      "subroutine": "smart_contracts/one_asa_transfer/contract.algo.ts::OneAsaTransfer.transfer",
+      "params": {
+        "assetId#0": "uint64",
+        "receiver#0": "bytes"
+      },
+      "block": "transfer",
+      "stack_in": [],
+      "op": "proto 2 0"
+    },
+    "94": {
+      "op": "txn Sender",
+      "defined_out": [
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0"
+      ]
+    },
+    "96": {
+      "op": "intc_1 // 0",
+      "defined_out": [
+        "0",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0",
+        "0"
+      ]
+    },
+    "97": {
+      "op": "bytec_0 // \"owner\"",
+      "defined_out": [
+        "\"owner\"",
+        "0",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0",
+        "0",
+        "\"owner\""
+      ]
+    },
+    "98": {
+      "op": "app_global_get_ex",
+      "defined_out": [
+        "maybe_exists%0#0",
+        "maybe_value%0#0",
+        "tmp%0#0"
+      ],
+      "stack_out": [
+        "tmp%0#0",
+        "maybe_value%0#0",
+        "maybe_exists%0#0"
+      ]
+    },
+    "99": {
+      "error": "check GlobalState exists",
+      "op": "assert // check GlobalState exists",
+      "stack_out": [
+        "tmp%0#0",
+        "maybe_value%0#0"
+      ]
+    },
+    "100": {
+      "op": "==",
+      "defined_out": [
+        "tmp%1#0"
+      ],
+      "stack_out": [
+        "tmp%1#0"
+      ]
+    },
+    "101": {
+      "op": "assert",
+      "stack_out": []
+    },
+    "102": {
+      "op": "itxn_begin"
+    },
+    "103": {
+      "op": "frame_dig -1",
+      "defined_out": [
+        "receiver#0 (copy)"
+      ],
+      "stack_out": [
+        "receiver#0 (copy)"
+      ]
+    },
+    "105": {
+      "op": "itxn_field AssetReceiver",
+      "stack_out": []
+    },
+    "107": {
+      "op": "intc_0 // 1",
+      "defined_out": [
+        "1"
+      ],
+      "stack_out": [
+        "1"
+      ]
+    },
+    "108": {
+      "op": "itxn_field AssetAmount",
+      "stack_out": []
+    },
+    "110": {
+      "op": "frame_dig -2",
+      "defined_out": [
+        "assetId#0 (copy)"
+      ],
+      "stack_out": [
+        "assetId#0 (copy)"
+      ]
+    },
+    "112": {
+      "op": "itxn_field XferAsset",
+      "stack_out": []
+    },
+    "114": {
+      "op": "pushint 4 // 4",
+      "defined_out": [
+        "4"
+      ],
+      "stack_out": [
+        "4"
+      ]
+    },
+    "116": {
+      "op": "itxn_field TypeEnum",
+      "stack_out": []
+    },
+    "118": {
+      "op": "intc_1 // 0",
+      "stack_out": [
+        "0"
+      ]
+    },
+    "119": {
+      "op": "itxn_field Fee",
+      "stack_out": []
+    },
+    "121": {
+      "op": "itxn_submit"
+    },
+    "122": {
+      "retsub": true,
+      "op": "retsub"
+    }
+  }
+}
