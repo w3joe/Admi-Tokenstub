@@ -7,6 +7,7 @@ A blockchain-based ticketing platform built on Algorand that eliminates scalping
 
 
 
+
 ## The Problem
 
 The ticketing industry faces critical challenges that hurt both event organizers and genuine fans:
@@ -19,6 +20,8 @@ The ticketing industry faces critical challenges that hurt both event organizers
 ## Our Solution
 
 Tokenstub leverages the Algorand blockchain to create fungible ticket tokens that can be validated, tracked, and controlled throughout their lifecycle. Our platform prevents scalping through smart contract-enforced transfer locks while maintaining ticket authenticity and transparency.
+
+![View Pitch Deck](https://github.com/w3joe/Admi-Tokenstub/blob/main/Tokenstub%20Pitch%20Deck.pdf)
 
 ### How It Works
 
