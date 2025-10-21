@@ -15,6 +15,8 @@ import Tokenmint from './components/Tokenmint'
 
 // Smart contract demo modal (backend app calls)
 import AppCalls from './components/AppCalls'
+import EventPage from './components/EventPage'
+import FreezeAccount from './components/FreezeAccount'
 
 interface HomeProps {}
 
@@ -32,7 +34,7 @@ const Home: React.FC<HomeProps> = () => {
       {/* ---------------- Navbar ---------------- */}
       <nav className="w-full bg-neutral-800 border-b border-neutral-700 px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500">
-          Algorand dApp Gateway
+          Tokenstub
         </h1>
         <button
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-700 hover:bg-neutral-600 text-sm font-semibold text-gray-100 transition"
@@ -43,23 +45,11 @@ const Home: React.FC<HomeProps> = () => {
         </button>
       </nav>
 
-      {/* ---------------- Hero Section ---------------- */}
-      <header className="text-center py-10 px-4">
-        <h2 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-500 mb-4">
-          Explore Algorand on TestNet
-        </h2>
-        <p className="text-gray-400 max-w-2xl mx-auto">
-          This project demonstrates the core building blocks of an Algorand dApp.
-          Connect your wallet, send transactions, mint NFTs, create tokens, and try out contract interactions —
-          all from a simple interface.
-        </p>
-      </header>
-
       {/* ---------------- Features Grid ---------------- */}
       <main className="flex-1 px-6 pb-12">
         {activeAddress ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Send Payment */}
+            {/* Send Payment
             <div className="p-6 bg-neutral-800 rounded-2xl border border-neutral-700 hover:border-cyan-500 transition">
               <AiOutlineSend className="text-4xl mb-3 text-green-400" />
               <h3 className="text-lg font-semibold mb-2">Send Payment</h3>
@@ -72,25 +62,11 @@ const Home: React.FC<HomeProps> = () => {
               >
                 Open
               </button>
-            </div>
+            </div> */}
 
-            {/* Mint NFT */}
-            <div className="p-6 bg-neutral-800 rounded-2xl border border-neutral-700 hover:border-pink-500 transition">
-              <AiOutlineStar className="text-4xl mb-3 text-pink-400" />
-              <h3 className="text-lg font-semibold mb-2">Mint NFT</h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Upload an image and mint it as an NFT on Algorand with IPFS metadata stored via Pinata.
-              </p>
-              <button
-                className="w-full py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white font-semibold transition"
-                onClick={() => setOpenMintModal(true)}
-              >
-                Open
-              </button>
-            </div>
-
+            
             {/* Create Token */}
-            <div className="p-6 bg-neutral-800 rounded-2xl border border-neutral-700 hover:border-purple-500 transition">
+            {/* <div className="p-6 bg-neutral-800 rounded-2xl border border-neutral-700 hover:border-purple-500 transition">
               <BsArrowUpRightCircle className="text-4xl mb-3 text-purple-400" />
               <h3 className="text-lg font-semibold mb-2">Create Token (ASA)</h3>
               <p className="text-sm text-gray-400 mb-4">
@@ -102,22 +78,7 @@ const Home: React.FC<HomeProps> = () => {
               >
                 Open
               </button>
-            </div>
-
-            {/* Contract Interactions */}
-            <div className="p-6 bg-neutral-800 rounded-2xl border border-neutral-700 hover:border-amber-500 transition">
-              <AiOutlineDeploymentUnit className="text-4xl mb-3 text-amber-400" />
-              <h3 className="text-lg font-semibold mb-2">Contract Interactions</h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Interact with a simple Algorand smart contract to see how stateful dApps work on chain.
-              </p>
-              <button
-                className="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold transition"
-                onClick={() => setOpenAppCallsModal(true)}
-              >
-                Open
-              </button>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className="text-center text-gray-500 mt-12">
@@ -128,10 +89,12 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* ---------------- Modals ---------------- */}
       <ConnectWallet openModal={openWalletModal} closeModal={() => setOpenWalletModal(false)} />
-      <Transact openModal={openPaymentModal} setModalState={setOpenPaymentModal} />
+      {/* <Transact openModal={openPaymentModal} setModalState={setOpenPaymentModal} />
       <NFTmint openModal={openMintModal} setModalState={setOpenMintModal} />
       <Tokenmint openModal={openTokenModal} setModalState={setOpenTokenModal} />
-      <AppCalls openModal={openAppCallsModal} setModalState={setOpenAppCallsModal} />
+      <AppCalls openModal={openAppCallsModal} setModalState={setOpenAppCallsModal} /> */}
+      <EventPage />
+
     </div>
   )
 }

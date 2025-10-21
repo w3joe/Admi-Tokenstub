@@ -30,14 +30,20 @@ if [ -f package.json ]; then
   ( npm ci || npm install )
 fi
 
-FRONTEND_DIR="QuickStartTemplate/projects/QuickStartTemplate-frontend"
-CONTRACTS_DIR="QuickStartTemplate/projects/QuickStartTemplate-contracts"
+BUYERFE_DIR="QuickStartTemplate/projects/EventBuyerSite"
+ORGANISERFE_DIR="QuickStartTemplate/projects/EventOrganiserScanner"
+CONTRACTS_DIR="QuickStartTemplate/projects/Contracts"
 
 echo "🧰 Installing frontend npm deps…"
-if [ -f "$FRONTEND_DIR/package.json" ]; then
-  ( npm --prefix "$FRONTEND_DIR" ci || npm --prefix "$FRONTEND_DIR" install )
-  # Ensure the client generator dev dep is present (your requested line)
-  npm --prefix "$FRONTEND_DIR" install --save-dev @algorandfoundation/algokit-client-generator@latest
+if [ -f "$BUYERFE_DIR/package.json" ]; then
+  ( npm --prefix "$BUYERFE_DIR" ci || npm --prefix "$BUYERFE_DIR" install )
+  npm --prefix "$BUYERFE_DIR" install --save-dev @algorandfoundation/algokit-client-generator@latest
+fi
+
+# Install organiser scanner frontend deps if present
+if [ -f "$ORGANISERFE_DIR/package.json" ]; then
+  echo "🧰 Installing organiser scanner npm deps…"
+  ( npm --prefix "$ORGANISERFE_DIR" ci || npm --prefix "$ORGANISERFE_DIR" install )
 fi
 
 echo "🧰 Installing contracts npm deps…"
@@ -46,9 +52,9 @@ if [ -f "$CONTRACTS_DIR/package.json" ]; then
 fi
 
 echo "🧬 Generating app clients (non-interactive)…"
-if [ -d "$FRONTEND_DIR" ]; then
+if [ -d "$BUYERFE_DIR" ]; then
   (
-    cd "$FRONTEND_DIR"
+    cd "$BUYERFE_DIR"
     ALGOKIT_NO_INTERACTIVE=1 ALGOKIT_NO_SPINNER=1 \
     algokit project link --all || true
   )

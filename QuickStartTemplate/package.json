@@ -1,10 +1,11 @@
 {
   "scripts": {
-    "deps:frontend:needed": "bash -lc 'DIR=projects/QuickStartTemplate-frontend; [ -d \"$DIR/node_modules\" ] || (npm -C \"$DIR\" ci || npm -C \"$DIR\" install)'",
-    "deps:backend:needed": "bash -lc 'DIR=projects/QuickStartTemplate-contracts; [ -d \"$DIR/node_modules\" ] || (npm -C \"$DIR\" ci || npm -C \"$DIR\" install)'",
-    "deps:needed": "npm run deps:frontend:needed && npm run deps:backend:needed",
+    "deps:frontend:needed": "bash -lc 'DIR=projects/EventBuyerSite; [ -d \"$DIR/node_modules\" ] || (npm -C \"$DIR\" ci || npm -C \"$DIR\" install)'",
+    "deps:organiser:needed": "bash -lc 'DIR=projects/EventOrganiserScanner; [ -d \"$DIR/node_modules\" ] || (npm -C \"$DIR\" ci || npm -C \"$DIR\" install)'",
+    "deps:backend:needed": "bash -lc 'DIR=projects/Contracts; [ -d \"$DIR/node_modules\" ] || (npm -C \"$DIR\" ci || npm -C \"$DIR\" install)'",
+    "deps:needed": "npm run deps:frontend:needed && npm run deps:organiser:needed && npm run deps:backend:needed",
     "bootstrap": "npx -y algokit project bootstrap all",
     "setup": "npm run deps:needed && npm run bootstrap",
-    "dev": "npx -y concurrently -k -n FRONTEND,SERVER -c auto \"cd projects/QuickStartTemplate-frontend && npm run dev\" \"cd projects/QuickStartTemplate-contracts && node nft_mint_server/server.js\""
+    "dev": "npx -y concurrently -k -n BUYER,ORGANISER,SERVER -c auto \"cd projects/EventBuyerSite && npm run dev\" \"cd projects/EventOrganiserScanner && npm run dev -- --port 5174\" \"cd projects/Contracts && node nft_mint_server/server.js\""
   }
 }

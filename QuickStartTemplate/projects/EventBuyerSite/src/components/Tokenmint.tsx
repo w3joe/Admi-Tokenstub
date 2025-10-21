@@ -4,9 +4,8 @@ import { AlgorandClient } from '@algorandfoundation/algokit-utils'
 import { useWallet } from '@txnlab/use-wallet-react'
 import { useSnackbar } from 'notistack'
 import { useMemo, useState, useRef } from 'react'
-import { AiOutlineLoading3Quarters, AiOutlineInfoCircle } from 'react-icons/ai'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { BsCoin } from 'react-icons/bs'
-import { FaPlus, FaTrash } from 'react-icons/fa'
 import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
 
 interface TokenMintProps {
@@ -68,6 +67,11 @@ const Tokenmint = ({ openModal, setModalState }: TokenMintProps) => {
           freeze: activeAddress,
           clawback: activeAddress,
         })
+
+        // Ensure assetId was returned
+        if (!createResult?.assetId) {
+          throw new Error('Asset created but no assetId returned by algod')
+        }
 
         // Attempt to opt-in the user by using algokit assetOptIn helper.
         // Retry opt-in a few times with small backoff because indexer/algod may not have asset details immediately.
