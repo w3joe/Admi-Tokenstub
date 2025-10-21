@@ -3,6 +3,8 @@
 A blockchain-based ticketing platform built on Algorand that eliminates scalping and creates a transparent, secure event ticketing ecosystem.
 
 <img width="1200" height="950" alt="image" src="https://github.com/user-attachments/assets/0703f3d2-07d5-410b-9e47-d25a91cf9ac9" />
+<img width="1225" height="795" alt="image" src="https://github.com/user-attachments/assets/c931313a-6ea8-42bb-a863-bc419f27a8ed" />
+
 
 
 ## The Problem
@@ -37,15 +39,10 @@ Tokenstub leverages the Algorand blockchain to create fungible ticket tokens tha
 
 
 ### Ticket Buyer
-https://github.com/user-attachments/assets/45e4ed7b-7a33-4145-830b-3c48a8a73e7e
-
-
+![Event Buyer Demo](https://github.com/user-attachments/assets/c4ca7c45-359f-434e-b2d0-383e431de9df)
 
 ### Event Organiser
-
-https://github.com/user-attachments/assets/7f8a5c2b-4a44-40e4-a300-cde2f56b4321
-
-
+![Event Organiser Demo](https://github.com/user-attachments/assets/d6b491cb-b4fa-43f8-a5a1-7a4752929f33)
 
 
 ### Secure Validation
@@ -109,32 +106,6 @@ https://github.com/user-attachments/assets/7f8a5c2b-4a44-40e4-a300-cde2f56b4321
 3. Scan or verify ticket IDs on-chain
 4. Mark tickets as validated to prevent reuse
 
-## Roadmap
-
-**Phase 1: MVP Launch**
-
-- Core ticketing functionality
-- Transfer lock implementation
-- Basic validation system
-
-**Phase 2: Enhanced Features**
-
-- Mobile validation app
-- Event organizer dashboard
-- Secondary market (post-event only)
-
-**Phase 3: Ecosystem Growth**
-
-- Integration with major event platforms
-- NFT collectibles for memorable events
-- Loyalty rewards program
-
-**Phase 4: Scale**
-
-- Multi-chain support
-- Enterprise partnerships
-- Global expansion
-
 ## Why Algorand?
 
 We chose Algorand for several compelling reasons:
@@ -153,16 +124,6 @@ We welcome contributions from the community! Please see our contributing guideli
 
 [License Type] - See LICENSE file for details
 
-## Contact
-
-- **Website**: [tokenstub.io]
-- **Email**: hello@tokenstub.io
-- **Twitter**: @tokenstub
-- **Discord**: [Community Link]
-
----
-
-_Built with ♥ for fans, by fans. Powered by Algorand._
 
 ### Initial setup
 
